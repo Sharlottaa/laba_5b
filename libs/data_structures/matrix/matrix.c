@@ -3,6 +3,7 @@
 #include <malloc.h>
 
 
+
 matrix getMemMatrix(int nRows, int nCols) {
     int **values = (int **) malloc(sizeof(int *) * nRows);
     for (int i = 0; i < nRows; ++i) {
@@ -95,18 +96,67 @@ void swapColumns(matrix m, int j1, int j2) {
 //В процессе сортировки создайте вспомогательный массив из nRows элементов, найдите значение
 //функции для каждого ряда и выполните сортировку данного массива. В процессе обмена элементов
 //полученного массива производите обмен строк при помощи swapRows.
-void insertionSortRowsMatrixByRowCriteria(matrix m){
+void insertionSortRowsMatrixByRowCriteria(matrix m, int (*criteria)(int *, int)) {
+    int *a = (int *) (malloc(sizeof(int) * m.nRows));
     for (int i = 0; i < m.nRows; ++i) {
-
-        for (int i = 0; i < m.values; ++i) {
-            int *const t = m.values[i];
-            int j = i;
-            while (j > 0 && m.values[j] > t) {
-                m.values[j] = m.values[j - 1];
-                j--;
-            }
-            m.values[j] = t;
-        }
-
+        a[i] = criteria(m.values[i], m.nCols);
     }
+    for (int i = 1; i < m.nRows; ++i) {
+        int t = a[i];
+        int j = i;
+        while (j > 0 && a[j - 1] > t) {
+            a[j] = a[j - 1];
+            m.values[j] = m.values[j - 1];
+            j--;
+        }
+        a[j] = t;
+        swapRows(m, i, j);
+    }
+    free(a);
+}
+//выполняет сортировку вставками
+//столбцов матрицы m по неубыванию значения функции criteria применяемой для столбцов
+//7В отличии от прошлого случая, функция применяется к столбцам матрицы. Однако функция критерий
+// ожидает указатель на последовательный участок памяти. Но в силу такого размещения
+//матриц это невозможно, поэтому придётся выполнить копирование столбца в промежуточный массив
+// и только потом вычислять значение критерия. Таким образом допускается, что
+// будет использована дополнительная память для значений критерия и столбца матрицы
+void insertionSortColsMatrixByColCriteria(matrix m, int (*criteria)(int *, int));
+
+bool isSquareMatrix(matrix m){return m.nRows==m.nCols;}
+
+bool twoMatricesEqual(matrix m1, matrix m2) {
+    for (int i = 0; i < m1.nRows; ++i) {
+        for (int j = 0; j < m1.nCols; ++j) {
+            if (m1.values[i][j] == m2.values[i][j]) {
+                return m1.nRows == m2.nRows && m1.nCols == m2.nCols;
+            } else {
+                return 0;
+            }
+        }
+    }
+}
+
+bool isEMatrix(matrix m) {
+    bool isIdentityMatrix = true;
+    for (int i = 0; i < m.nRows; ++i) {
+        for (int j = 0; j < m.nCols; ++j) {
+            if (i == j && m.values[i][j] != 1) {
+                isIdentityMatrix = false;
+            }
+        }
+    }
+    return isIdentityMatrix;
+}
+
+bool isSymmetricMatrix(matrix m){
+    bool isSymmetric = true;
+    for (int i = 0; i < m.nRows; ++i) {
+        for (int j = 0; j < m.nCols; ++j) {
+            if(m.values[i][j]!=m.values[j][i]){
+                isSymmetric=false;
+            }
+        }
+    }
+    return isSymmetric;
 }

@@ -8,12 +8,16 @@
 
 
 int main() {
-    matrix m=getMemMatrix(2,2);
-    inputMatrix(m);
-   // insertionSortRowsMatrixByRowCriteria(m);
-    outputMatrix(m);
-    freeMemMatrix(m);
- return 0;
+    matrix m1=getMemMatrix(2,2);
+
+    inputMatrix(m1);
+    ;
+    printf("%d",isSymmetricMatrix(m1));
+    outputMatrix(m1);
+
+    freeMemMatrix(m1);
+
+    return 0;
 }
 
 
