@@ -8,11 +8,11 @@
 
 
 int main() {
-    matrix m1=getMemMatrix(2,2);
+    matrix m1=getMemMatrix(3,2);
 
     inputMatrix(m1);
-    ;
-    printf("%d",isSymmetricMatrix(m1));
+    transposeSquareMatrix(m1);
+  //  printf("%d",isSymmetricMatrix(m1));
     outputMatrix(m1);
 
     freeMemMatrix(m1);
