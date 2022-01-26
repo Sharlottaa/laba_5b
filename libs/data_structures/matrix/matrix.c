@@ -37,7 +37,7 @@ void freeMemMatrices(matrix *ms, int nMatrices) {
 void inputMatrix(matrix m) {
     for (int i = 0; i < m.nRows; ++i) {
         for (int j = 0; j < m.nCols; ++j) {
-            scanf("%d", &(m.values[i][j]));
+            scanf("%d", &m.values[i][j]);
         }
     }
 }
