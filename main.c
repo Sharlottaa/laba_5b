@@ -94,7 +94,7 @@ long long getSum(const int *a, const int n) {
 }
 
 void transposeIfMatrixHasEqualSumOfRows(matrix m) {
-    long long *a = (int *) calloc(m.nRows, sizeof(long long));
+    long long *a = (long long *) calloc(m.nRows, sizeof(long long));
     assert(a != NULL);
 
     for (register size_t i = 0; i < m.nRows; ++i) {
@@ -106,16 +106,30 @@ void transposeIfMatrixHasEqualSumOfRows(matrix m) {
     free(a);
 }
 
+//6.Даны две квадратные матрицы 𝐴 и 𝐵. Определить, являются ли они взаимно
+//обратными (𝐴 = 𝐵−1).
+
+bool isMutuallyInverseMatrices(matrix m1, matrix m2){
+    matrix mul=mulMatrices(m1, m2);
+    if (isEMatrix(mul)){
+        return 1;
+    }
+    return 0;
+}
+
+
+
 int main() {
     matrix m1 = getMemMatrix(2, 2);
-
+    matrix m2 = getMemMatrix(2, 2);
     inputMatrix(m1);
-    transposeIfMatrixHasEqualSumOfRows(m1);
-    // printf("%d",isSymmetricMatrix(m1));
+    inputMatrix(m2);
+    //transposeIfMatrixHasEqualSumOfRows(m1);
+     printf("%d",isMutuallyInverseMatrices(m1,m2));
     outputMatrix(m1);
-
+    outputMatrix(m2);
     freeMemMatrix(m1);
-
+    freeMemMatrix(m2);
     return 0;
 }
 
