@@ -86,7 +86,9 @@ bool isUnique(const long long *a, int n) {
     return 1;
 }
 
-long long getSum(const int *a, const int n) {
+long long getSum( const int *a, int n);
+
+long long getSum(const int *a, int n) {
     long long sum = 0;
     for (size_t i = 0; i < n; ++i)
         sum += a[i];
@@ -116,20 +118,88 @@ bool isMutuallyInverseMatrices(matrix m1, matrix m2){
     }
     return 0;
 }
+//Дана прямоугольная матрица. Назовем псевдодиагональю множество элементов этой матрицы, лежащих на прямой, параллельной прямой, содержащей элементы 𝑎𝑖,𝑖. Найти сумму максимальных элементов всех псевдодиагоналей данной матрицы. На рисунке ниже все псевдодиагонали выделены различными
+//цветами:
 
+void k_(matrix m) {
+    int sum = 0;
+    int max_up = m.values[0][1];
+    int max_down = m.values[1][0];
+    for (int i = 0; i < m.nRows; i++)
+        for (int j = 0; j < m.nCols; ++j) {
+            if (j > i && max_up < m.values[i][j]){
+                max_up = m.values[i][j];
+                printf("%d", max_up);}
+            if (i > j && max_down < m.values[i][j]){
+                max_down = m.values[i][j];
+
+                printf("%d", max_down);}
+        }
+}
+
+int max(int a, int b) { return a < b ? b : a; }
+
+void append(int *a, int *n, const int value) {
+    a[*n] = value;
+    (*n)++;
+}
+
+int getMaxValueOfPseudoDiagonal(matrix m, int row, int col){
+    int maxValue = m.values[row][col];
+
+    while (col < m.nCols && row < m.nRows) {
+        maxValue=max(m.values[row][col], maxValue);
+        row++;
+        col++;
+    }
+    return maxValue;
+}
+
+long long findSumOfMaxesOfPseudoDiagonal(matrix m) {
+    int *sumMax = (int *) malloc(sizeof(int) * (m.nRows + m.nCols - 1));
+    int size = 0;
+
+    for (int i = 1; i < m.nCols; i++) {
+        int row = 0, col = i;
+        int maxValueUp = getMaxValueOfPseudoDiagonal(m, row, col);
+        append(sumMax, &size, maxValueUp);
+    }
+    for (int i = 0; i < m.nRows - 1; i++) {
+        int row = m.nRows - 1, col = i;
+        int maxValueDown = getMaxValueOfPseudoDiagonal(m, row, col);
+        append(sumMax, &size, maxValueDown);
+    }
+
+    long long sum = getSum(sumMax, size);
+    free(sumMax);
+    return sum;
+}
+
+
+int k(matrix m){
+    int sum = 0;
+    for (int i =0; i < m.nRows; i++)
+        for (int j = 0; j < m.nCols; ++j) {
+            if(i==j){
+                sum+=m.values[i][j];
+            }
+        }
+    return sum;
+}
 
 
 int main() {
-    matrix m1 = getMemMatrix(2, 2);
-    matrix m2 = getMemMatrix(2, 2);
+    matrix m1 = getMemMatrix(3, 4);
+  //  matrix m2 = getMemMatrix(3, 3);
     inputMatrix(m1);
-    inputMatrix(m2);
+   // inputMatrix(m2);
     //transposeIfMatrixHasEqualSumOfRows(m1);
-     printf("%d",isMutuallyInverseMatrices(m1,m2));
-    outputMatrix(m1);
-    outputMatrix(m2);
+     printf("%d",maxDiagonalSum_(m1));
+    //maxDiagonalSum(m1);
+   // outputMatrix(m1);
+ //   outputMatrix(m2);
     freeMemMatrix(m1);
-    freeMemMatrix(m2);
+//    freeMemMatrix(m2);
     return 0;
 }
 
