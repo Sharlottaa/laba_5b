@@ -206,7 +206,7 @@ int cmp(const void *pa, const void *pb) {
 }
 
 int countNUnique(int *a, int n) {
-    int count=0;
+    int count = 0;
     for (int i = 0; i < n - 1; i++)
         for (int j = i + 1; j < n; j++)
             if (a[i] == a[j])
@@ -229,16 +229,49 @@ int countEqClassesByRowsSum(matrix m){
     return countEq;
 }
 
+//11. Дана квадратная матрица. Определить 𝑘 – количество "особых" элементов матрицы, считая элемент "особым", если он больше суммы остальных элементов
+//своего столбца.
 
+int getNSpecialElement(matrix m){
+    assert(m.nCols==m.nRows);
+    int *aColm=(int*) malloc(sizeof(int)*m.nRows);
+    int *aColmSum=(int*) malloc(sizeof(int)*m.nRows);
+    if(NULL==aColm||NULL==aColmSum){
+        fprintf(stderr, "bad alloc");
+        exit(1);
+    }
+    int count=0;
+    for (int i = 0; i < m.nRows; ++i) {
+        for (int j = 0; j < m.nCols; ++j) {
+            aColm[i]=m.values[j][i];
+        }
+        int maxInCol= getMax(aColm,m.nRows);
+         aColmSum[i]= (int)getSum(aColm,m.nRows);
+        if(aColmSum[i]-maxInCol<maxInCol){
+            count++;
+        }
+    }
+    free(aColm);
+    free(aColmSum);
+    return count;
+}
+
+//Дана квадратная матрица. Заменить предпоследнюю строку матрицы первым
+//из столбцов, в котором находится минимальный элемент матрицы.
+
+position getLeftMin(matrix m){
+
+}
 
 int main() {
-    matrix m1 = getMemMatrix(6, 2);
+    matrix m1 = getMemMatrix(3, 3);
 
   //  matrix m2 = getMemMatrix(3, 3);
     inputMatrix(m1);
    // inputMatrix(m2);
     //transposeIfMatrixHasEqualSumOfRows(m1);
-     //printf("%d",countEqClassesByRowsSum(m1));
+    //getNSpecialElement(m1);
+     printf("%d",getNSpecialElement(m1));
     //maxDiagonalSum(m1);
     //outputMatrix(m1);
  //   outputMatrix(m2);
