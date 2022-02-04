@@ -187,6 +187,44 @@ int k(matrix m){
     return sum;
 }
 
+//8. Дана прямоугольная матрица, все элементы которой различны. Найти минимальный элемент матрицы в выделенной области:
+
+int getMinInArea(matrix m){
+    position maxIndex= getMaxValuePos(m);
+
+}
+
+//10
+
+int cmp(const void *pa, const void *pb) {
+    int arg1 = *(const int *) pa;
+    int arg2 = *(const int *) pb;
+
+    if (arg1 < arg2) return -1;
+    if (arg1 > arg2) return 1;
+    return 0;
+}
+
+int countNUnique(int *a, int n){
+
+}
+
+int countEqClassesByRowsSum(matrix m){
+    int *sum=(int*) malloc(sizeof(int)*m.nRows);
+    if(NULL==sum){
+        fprintf(stderr, "bad alloc");
+        exit(1);
+    }
+    for (int i = 0; i < m.nRows; ++i) {
+        int sumRow= (int)getSum(m.values[i],m.nCols);
+        append(sum,&m.nRows,sumRow);
+    }
+    qsort(sum,m.nRows,sizeof(int),cmp);
+
+    free(sum);
+}
+
+
 
 int main() {
     matrix m1 = getMemMatrix(3, 4);
@@ -194,7 +232,7 @@ int main() {
     inputMatrix(m1);
    // inputMatrix(m2);
     //transposeIfMatrixHasEqualSumOfRows(m1);
-     printf("%d",maxDiagonalSum_(m1));
+     //printf("%d",(m1));
     //maxDiagonalSum(m1);
    // outputMatrix(m1);
  //   outputMatrix(m2);
