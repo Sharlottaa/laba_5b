@@ -205,8 +205,13 @@ int cmp(const void *pa, const void *pb) {
     return 0;
 }
 
-int countNUnique(int *a, int n){
-
+int countNUnique(int *a, int n) {
+    int count=0;
+    for (int i = 0; i < n - 1; i++)
+        for (int j = i + 1; j < n; j++)
+            if (a[i] == a[j])
+                count++;
+    return count;
 }
 
 int countEqClassesByRowsSum(matrix m){
@@ -216,27 +221,28 @@ int countEqClassesByRowsSum(matrix m){
         exit(1);
     }
     for (int i = 0; i < m.nRows; ++i) {
-        int sumRow= (int)getSum(m.values[i],m.nCols);
-        append(sum,&m.nRows,sumRow);
+        sum[i]= (int)getSum(m.values[i],m.nCols);
     }
     qsort(sum,m.nRows,sizeof(int),cmp);
-
+    int countEq=countNUnique(sum,m.nRows);
     free(sum);
+    return countEq;
 }
 
 
 
 int main() {
-    matrix m1 = getMemMatrix(3, 4);
+    matrix m1 = getMemMatrix(6, 2);
+
   //  matrix m2 = getMemMatrix(3, 3);
     inputMatrix(m1);
    // inputMatrix(m2);
     //transposeIfMatrixHasEqualSumOfRows(m1);
-     //printf("%d",(m1));
+     //printf("%d",countEqClassesByRowsSum(m1));
     //maxDiagonalSum(m1);
-   // outputMatrix(m1);
+    //outputMatrix(m1);
  //   outputMatrix(m2);
-    freeMemMatrix(m1);
+   freeMemMatrix(m1);
 //    freeMemMatrix(m2);
     return 0;
 }
