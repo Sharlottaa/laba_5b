@@ -273,19 +273,38 @@ void swapPenultimateRow(matrix m){
     free(aColm);
 }
 
+//Дан массив квадратных матриц. Определить число матриц, строки которых
+//упорядочены по неубыванию элементов (подходящие матрицы выделены зеленым):
+
+bool isNonDescendingSorted(int *a, int n) {
+    for (int i = 0; i < n; ++i) {
+        if (a[i] < a[i - 1])
+            return 0;
+    }
+    return 1;
+}
+bool hasAllNonDescendingRows(matrix m){
+    for (int i = 0; i < m.nRows; ++i) {
+            if (!isNonDescendingSorted(m.values[i],m.nCols)) {
+                return 0;
+            }
+    }
+    return 1;
+}
+
 
 int main() {
     matrix m1 = getMemMatrix(3, 3);
-
   //  matrix m2 = getMemMatrix(3, 3);
     inputMatrix(m1);
-   // inputMatrix(m2);
+    // inputMatrix(m2);
+    printf("%d", hasAllNonDescendingRows(m1));
     //transposeIfMatrixHasEqualSumOfRows(m1);
     //getNSpecialElement(m1);
-    swapPenultimateRow(m1);
+    //swapPenultimateRow(m1);
      //printf("%d",getLeftMin(m1));
     //maxDiagonalSum(m1);
-    outputMatrix(m1);
+    //outputMatrix(m1);
  //   outputMatrix(m2);
    freeMemMatrix(m1);
 //    freeMemMatrix(m2);
