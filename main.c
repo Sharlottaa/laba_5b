@@ -259,6 +259,7 @@ int getNSpecialElement(matrix m){
 //12 Дана квадратная матрица. Заменить предпоследнюю строку матрицы первым
 //из столбцов, в котором находится минимальный элемент матрицы.
 
+
 void swapPenultimateRow(matrix m){
     assert(m.nCols==m.nRows);
     int *aColm=(int*) malloc(sizeof(int)*m.nRows);
@@ -278,7 +279,7 @@ void swapPenultimateRow(matrix m){
 
 bool isNonDescendingSorted(int *a, int n) {
     for (int i = 0; i < n; ++i) {
-        if (a[i] < a[i - 1])
+        if (a[i] > a[i+1])
             return 0;
     }
     return 1;
@@ -292,21 +293,50 @@ bool hasAllNonDescendingRows(matrix m){
     return 1;
 }
 
+int countNonDescendingRowsMatrices(matrix *ms, int nMatrix){
+    int count=0;
+    for (int i = 0; i < nMatrix; ++i) {
+        if(hasAllNonDescendingRows(ms[i])){
+            count++;
+        }
+    }
+    return count;
+}
 
 int main() {
-    matrix m1 = getMemMatrix(3, 3);
-  //  matrix m2 = getMemMatrix(3, 3);
-    inputMatrix(m1);
+    int a[] = {7, 0,
+               1, 1,
+               3, 3,
+               1, 6,
+            ////
+               2, 3,
+               4, 5,
+               4, 4,
+               2, 3,
+            ////
+               4, -7,
+               1, 1,
+               6, 7,
+               2, -13,
+            ////
+               3, 8,
+               2, 3,
+               -2, 1,
+               2, 2};
+    matrix *ms = createArrayOfMatrixFromArray(a, 4, 4, 2);
+    //  matrix m2 = getMemMatrix(3, 3);
+    //inputMatrix(m1);
     // inputMatrix(m2);
-    printf("%d", hasAllNonDescendingRows(m1));
+   // int a[5]={1,2,3,4,5};
+    printf("%d", countNonDescendingRowsMatrices(ms,4));
     //transposeIfMatrixHasEqualSumOfRows(m1);
     //getNSpecialElement(m1);
     //swapPenultimateRow(m1);
      //printf("%d",getLeftMin(m1));
     //maxDiagonalSum(m1);
-    //outputMatrix(m1);
+   // outputMatrix(m1);
  //   outputMatrix(m2);
-   freeMemMatrix(m1);
+   freeMemMatrices(ms,4);
 //    freeMemMatrix(m2);
     return 0;
 }
