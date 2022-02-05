@@ -263,6 +263,10 @@ int getNSpecialElement(matrix m){
 void swapPenultimateRow(matrix m){
     assert(m.nCols==m.nRows);
     int *aColm=(int*) malloc(sizeof(int)*m.nRows);
+    if(NULL==aColm){
+        fprintf(stderr, "bad alloc");
+        exit(1);
+    }
     position min= getMinValuePos(m);
     int col=min.colIndex;//местоположение столбца с минимом
     for (int i = 0; i < m.nRows; ++i) {
@@ -274,7 +278,7 @@ void swapPenultimateRow(matrix m){
     free(aColm);
 }
 
-//Дан массив квадратных матриц. Определить число матриц, строки которых
+//13 Дан массив квадратных матриц. Определить число матриц, строки которых
 //упорядочены по неубыванию элементов (подходящие матрицы выделены зеленым):
 
 bool isNonDescendingSorted(int *a, int n) {
@@ -303,32 +307,58 @@ int countNonDescendingRowsMatrices(matrix *ms, int nMatrix){
     return count;
 }
 
+//14 Дан массив целочисленных матриц. Вывести матрицы, имеющие наибольшее
+//число нулевых строк
+
+int countValues(const int *a, int n, int value){
+    int count=0;
+    for (int i = 0; i < n; ++i) {
+        if(a[i]==value){
+            count++;
+        }
+    }
+    return count;
+}
+
+int countZeroRows(matrix m){
+    int count=0;
+    for (int i = 0; i < m.nRows; ++i) {
+        count+= countValues(m.values[i],m.nCols,0);
+    }
+    return count;
+}
+
+void printMatrixWithMaxZeroRows(matrix *ms, int nMatrix){
+    int *aCountZeroRows=(int*) malloc(sizeof(int) * nMatrix);
+    if(NULL == aCountZeroRows){
+        fprintf(stderr, "bad alloc");
+        exit(1);
+    }
+    for (int i = 0; i < nMatrix; ++i) {
+        aCountZeroRows[i]= countZeroRows(ms[i]);
+    }
+    int maxCountZeroRows= getMax(aCountZeroRows,nMatrix);
+    for (int i = 0; i < nMatrix; ++i) {
+        if(aCountZeroRows[i]==maxCountZeroRows){
+            outputMatrix(ms[i]);
+        }
+    }
+    free(aCountZeroRows);
+}
+
 int main() {
-    int a[] = {7, 0,
-               1, 1,
-               3, 3,
-               1, 6,
+    //int a[] = {0, 1,
+     //          1, 0,
+     //          0, 0,
             ////
-               2, 3,
-               4, 5,
-               4, 4,
-               2, 3,
-            ////
-               4, -7,
-               1, 1,
-               6, 7,
-               2, -13,
-            ////
-               3, 8,
-               2, 3,
-               -2, 1,
-               2, 2};
-    matrix *ms = createArrayOfMatrixFromArray(a, 4, 4, 2);
+      //        };
+      int a[5]={1,0,3,4,0};
+    matrix *ms = createArrayOfMatrixFromArray(a, 4, 3, 2);
     //  matrix m2 = getMemMatrix(3, 3);
     //inputMatrix(m1);
     // inputMatrix(m2);
    // int a[5]={1,2,3,4,5};
-    printf("%d", countNonDescendingRowsMatrices(ms,4));
+    //printf("%d", countNonDescendingRowsMatrices(ms,4));
     //transposeIfMatrixHasEqualSumOfRows(m1);
     //getNSpecialElement(m1);
     //swapPenultimateRow(m1);
@@ -336,6 +366,7 @@ int main() {
     //maxDiagonalSum(m1);
    // outputMatrix(m1);
  //   outputMatrix(m2);
+    printMatrixWithMaxZeroRows(ms,4);
    freeMemMatrices(ms,4);
 //    freeMemMatrix(m2);
     return 0;
