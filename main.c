@@ -256,12 +256,23 @@ int getNSpecialElement(matrix m){
     return count;
 }
 
-//Дана квадратная матрица. Заменить предпоследнюю строку матрицы первым
+//12 Дана квадратная матрица. Заменить предпоследнюю строку матрицы первым
 //из столбцов, в котором находится минимальный элемент матрицы.
 
-position getLeftMin(matrix m){
-
+void swapPenultimateRow(matrix m){
+    assert(m.nCols==m.nRows);
+    int *aColm=(int*) malloc(sizeof(int)*m.nRows);
+    position min= getMinValuePos(m);
+    int col=min.colIndex;//местоположение столбца с минимом
+    for (int i = 0; i < m.nRows; ++i) {
+        aColm[i]=m.values[i][col];//столбец с минимом
+    }
+    for (int i = 0; i < m.nCols; ++i) {
+        m.values[m.nRows-2][i]=aColm[i];//строка предпоследняя с минимом столбца
+    }
+    free(aColm);
 }
+
 
 int main() {
     matrix m1 = getMemMatrix(3, 3);
@@ -271,9 +282,10 @@ int main() {
    // inputMatrix(m2);
     //transposeIfMatrixHasEqualSumOfRows(m1);
     //getNSpecialElement(m1);
-     printf("%d",getNSpecialElement(m1));
+    swapPenultimateRow(m1);
+     //printf("%d",getLeftMin(m1));
     //maxDiagonalSum(m1);
-    //outputMatrix(m1);
+    outputMatrix(m1);
  //   outputMatrix(m2);
    freeMemMatrix(m1);
 //    freeMemMatrix(m2);
