@@ -310,14 +310,13 @@ int countNonDescendingRowsMatrices(matrix *ms, int nMatrix){
 //14 Дан массив целочисленных матриц. Вывести матрицы, имеющие наибольшее
 //число нулевых строк
 
-int countValues(const int *a, int n, int value){
-    int count=0;
+bool countValues(const int *a, int n, int value){
     for (int i = 0; i < n; ++i) {
-        if(a[i]==value){
-            count++;
+        if(a[i]!=value){
+            return 0;
         }
     }
-    return count;
+    return 1;
 }
 
 int countZeroRows(matrix m){
@@ -347,12 +346,24 @@ void printMatrixWithMaxZeroRows(matrix *ms, int nMatrix){
 }
 
 int main() {
-    //int a[] = {0, 1,
-     //          1, 0,
-     //          0, 0,
+    int a[] = {0, 1,
+               1, 0,
+               0, 0,
             ////
-      //        };
-      int a[5]={1,0,3,4,0};
+               1, 1,
+               1, 0,
+               1, 0,
+               ////
+               0, 0,
+               0, 0,
+               4, 0,
+               ////
+               0, 0,
+               1, 0,
+               0, 0,
+              };
+      //int a[5]={1,0,3,4,0};
+   // printf("%d",countValues(a,5,0));
     matrix *ms = createArrayOfMatrixFromArray(a, 4, 3, 2);
     //  matrix m2 = getMemMatrix(3, 3);
     //inputMatrix(m1);
