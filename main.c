@@ -347,14 +347,24 @@ void printMatrixWithMaxZeroRows(matrix *ms, int nMatrix){
 
 //15
 void insertion(matrix m) {
-    int *arrayCols=(int *) (malloc(sizeof(int) * m.nCols));
+    int *arrayCols=(int *) (malloc(sizeof(int) *m.nCols));
     int *arrayColsWithCriteria=(int *) (malloc(sizeof(int) * m.nCols));
     for (int i = 0; i < m.nRows; ++i) {
         for (int j = 0; j < m.nCols; ++j) {
-            arrayCols[j]=m.values[i][j];
+            arrayCols[j]=m.values[j][i];
         }
         arrayColsWithCriteria[i]=getMax(arrayCols, m.nRows);
         printf("%d",arrayColsWithCriteria[i]);
+    }
+    for (int i = 1; i < m.nRows; ++i) {
+        int t = arrayColsWithCriteria[i];
+        int j = i;
+        while (j > 0 && arrayColsWithCriteria[j - 1] > t) {
+            arrayColsWithCriteria[j] = arrayColsWithCriteria[j - 1];
+            swapColumns(m, j, j-1);
+            j--;
+        }
+        arrayColsWithCriteria[j] = t;
     }
     free(arrayCols);
     free(arrayColsWithCriteria);
