@@ -97,22 +97,23 @@ void swapColumns(matrix m, int j1, int j2) {
 //функции для каждого ряда и выполните сортировку данного массива. В процессе обмена элементов
 //полученного массива производите обмен строк при помощи swapRows.
 void insertionSortRowsMatrixByRowCriteria(matrix m, int (*criteria)(int *, int)) {
-    int *a = (int *) (malloc(sizeof(int) * m.nRows));
+
+    int *arrayRowsWithCriteria = (int *) (malloc(sizeof(int) * m.nRows));
     for (int i = 0; i < m.nRows; ++i) {
-        a[i] = criteria(m.values[i], m.nCols);
+        arrayRowsWithCriteria[i] = criteria(m.values[i], m.nCols);
     }
     for (int i = 1; i < m.nRows; ++i) {
-        int t = a[i];
+        int t = arrayRowsWithCriteria[i];
         int j = i;
-        while (j > 0 && a[j - 1] > t) {
-            a[j] = a[j - 1];
-            m.values[j] = m.values[j - 1];
+        while (j > 0 && arrayRowsWithCriteria[j - 1] > t) {
+            arrayRowsWithCriteria[j] = arrayRowsWithCriteria[j - 1];
+            swapRows(m, j, j - 1);
             j--;
         }
-        a[j] = t;
-        swapRows(m, i, j);
+        arrayRowsWithCriteria[j] = t;
     }
-    free(a);
+    free(arrayRowsWithCriteria);
+
 }
 //выполняет сортировку вставками
 //столбцов матрицы m по неубыванию значения функции criteria применяемой для столбцов
@@ -121,7 +122,31 @@ void insertionSortRowsMatrixByRowCriteria(matrix m, int (*criteria)(int *, int))
 //матриц это невозможно, поэтому придётся выполнить копирование столбца в промежуточный массив
 // и только потом вычислять значение критерия. Таким образом допускается, что
 // будет использована дополнительная память для значений критерия и столбца матрицы
-void insertionSortColsMatrixByColCriteria(matrix m, int (*criteria)(int *, int));
+void insertionSortColsMatrixByColCriteria(matrix m, int (*criteria)(int *, int)){
+    int *arrayCols=(int *) (malloc(sizeof(int) * m.nCols));
+    int *arrayColsWithCriteria=(int *) (malloc(sizeof(int) * m.nCols));
+    for (int i = 0; i < m.nCols; ++i) {
+        for (int j = 0; j < m.nRows; ++j) {
+            arrayCols[i]=m.values[i][j];
+        }
+    }
+    for (int i = 0; i < m.nCols; ++i) {
+        arrayColsWithCriteria[i]=criteria(arrayCols, m.nRows);
+    }
+    for (int i = 1; i < m.nRows; ++i) {
+        int t = arrayColsWithCriteria[i];
+        int j = i;
+        while (j > 0 && arrayColsWithCriteria[j - 1] > t) {
+            arrayColsWithCriteria[j] = arrayColsWithCriteria[j - 1];
+            m.values[j] = m.values[j - 1];
+            j--;
+        }
+        arrayColsWithCriteria[j] = t;
+        swapColumns(m, i, j);
+    }
+    free(arrayCols);
+    free(arrayColsWithCriteria);
+}
 
 bool isSquareMatrix(matrix m){return m.nRows==m.nCols;}
 

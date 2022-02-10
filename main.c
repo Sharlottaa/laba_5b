@@ -345,28 +345,34 @@ void printMatrixWithMaxZeroRows(matrix *ms, int nMatrix){
     free(aCountZeroRows);
 }
 
+//15
+void insertion(matrix m) {
+    int *arrayCols=(int *) (malloc(sizeof(int) * m.nCols));
+    int *arrayColsWithCriteria=(int *) (malloc(sizeof(int) * m.nCols));
+    for (int i = 0; i < m.nRows; ++i) {
+        for (int j = 0; j < m.nCols; ++j) {
+            arrayCols[j]=m.values[i][j];
+        }
+        arrayColsWithCriteria[i]=getMax(arrayCols, m.nRows);
+        printf("%d",arrayColsWithCriteria[i]);
+    }
+    free(arrayCols);
+    free(arrayColsWithCriteria);
+}
+
 int main() {
-    int a[] = {0, 1,
-               1, 0,
-               0, 0,
+    //int a[] = {0, 1,
+               //1, 0,
+              // 0, 0,
             ////
-               1, 1,
-               1, 0,
-               1, 0,
-               ////
-               0, 0,
-               0, 0,
-               4, 0,
-               ////
-               0, 0,
-               1, 0,
-               0, 0,
-              };
+
+             // };
       //int a[5]={1,0,3,4,0};
    // printf("%d",countValues(a,5,0));
-    matrix *ms = createArrayOfMatrixFromArray(a, 4, 3, 2);
-    //  matrix m2 = getMemMatrix(3, 3);
-    //inputMatrix(m1);
+   // matrix *ms = createArrayOfMatrixFromArray(a, 4, 3, 2);
+     matrix m1 = getMemMatrix(3, 3);
+    inputMatrix(m1);
+    insertion(m1);
     // inputMatrix(m2);
    // int a[5]={1,2,3,4,5};
     //printf("%d", countNonDescendingRowsMatrices(ms,4));
@@ -375,11 +381,11 @@ int main() {
     //swapPenultimateRow(m1);
      //printf("%d",getLeftMin(m1));
     //maxDiagonalSum(m1);
-   // outputMatrix(m1);
+    outputMatrix(m1);
  //   outputMatrix(m2);
-    printMatrixWithMaxZeroRows(ms,4);
-   freeMemMatrices(ms,4);
-//    freeMemMatrix(m2);
+   // printMatrixWithMaxZeroRows(ms,4);
+   //freeMemMatrices(ms,4);
+   freeMemMatrix(m1);
     return 0;
 }
 
