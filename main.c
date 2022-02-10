@@ -17,7 +17,7 @@ void swapRowsMinMax(matrix m) {
 
 //2. Упорядочить строки матрицы по неубыванию наибольших элементов строк
 //возвращает максимальный элемент в одномерном массиве а размера n
-int getMax(const int *a, int n) {
+int getMax( int *a, int n) {
     int max = a[0];
     for (int i = 1; i < n; ++i) {
         if (a[i] > max) {
@@ -29,12 +29,7 @@ int getMax(const int *a, int n) {
 
 //сортирует в двумерном массиве по неубыванию максимальные значения в одномерном массиве
 void sortRowsByMinElement(matrix m) {
-    for (int i = 0; i < m.nRows - 1; i++)
-        for (int j = m.nRows - 1; j > i; j--) {
-            if (getMax(m.values[i], m.nCols) > getMax(m.values[j], m.nCols)) {
-                swapRows(m, j, i);
-            }
-        }
+    insertionSortRowsMatrixByRowCriteria(m,getMax);
 }
 
 
@@ -42,7 +37,7 @@ void sortRowsByMinElement(matrix m) {
 //минимальных элементов столбцов:
 
 //возвращает минимальный элемент в одномерном массиве а размера n
-int getMin(const int *a, int n) {
+int getMin( int *a, int n) {
     int min = a[0];
     for (int i = 1; i < n; ++i) {
         if (a[i] < min) {
@@ -52,7 +47,9 @@ int getMin(const int *a, int n) {
     return min;
 }
 
-void sortColsByMinElement(matrix m);
+void sortColsByMinElement(matrix m){
+    insertionSortColsMatrixByColCriteria(m,getMin);
+}
 
 // 4.сли данная квадратная матрица 𝐴 симметрична, то заменить 𝐴 ее квадрат
 matrix mulMatrices(matrix m1, matrix m2) {
@@ -77,7 +74,7 @@ void getSquareOfMatrixIfSymmetric(matrix *m) {
 
 // 5. Дана квадратная матрица. Если среди сумм элементов строк матрицы нет равных, то транспонировать матрицу
 
-bool isUnique(const long long *a, int n) {
+bool isUnique(int *a, int n) {
     for (int i = 0; i < n; ++i) {
         if (a[i] == a[i + 1]) {
             return 0;
@@ -86,9 +83,8 @@ bool isUnique(const long long *a, int n) {
     return 1;
 }
 
-long long getSum( const int *a, int n);
 
-long long getSum(const int *a, int n) {
+long long getSum( int *a, int n) {
     long long sum = 0;
     for (size_t i = 0; i < n; ++i)
         sum += a[i];
@@ -192,6 +188,18 @@ int k(matrix m){
 int getMinInArea(matrix m){
     position maxIndex= getMaxValuePos(m);
 
+}
+
+// 9
+double getDistance(int *a, int m){
+    int d=0;
+    for (int i = 0; i < m; ++i) {
+        d+=a[i]*a[i];
+    }
+    return sqrt(d);
+}
+void sortByDistances(matrix m){
+    insertionSortRowsMatrixByRowCriteria(m,getDistance);
 }
 
 //10
@@ -346,29 +354,7 @@ void printMatrixWithMaxZeroRows(matrix *ms, int nMatrix){
 }
 
 //15
-void insertion(matrix m) {
-    int *arrayCols=(int *) (malloc(sizeof(int) *m.nCols));
-    int *arrayColsWithCriteria=(int *) (malloc(sizeof(int) * m.nCols));
-    for (int i = 0; i < m.nRows; ++i) {
-        for (int j = 0; j < m.nCols; ++j) {
-            arrayCols[j]=m.values[j][i];
-        }
-        arrayColsWithCriteria[i]=getMax(arrayCols, m.nRows);
-        printf("%d",arrayColsWithCriteria[i]);
-    }
-    for (int i = 1; i < m.nRows; ++i) {
-        int t = arrayColsWithCriteria[i];
-        int j = i;
-        while (j > 0 && arrayColsWithCriteria[j - 1] > t) {
-            arrayColsWithCriteria[j] = arrayColsWithCriteria[j - 1];
-            swapColumns(m, j, j-1);
-            j--;
-        }
-        arrayColsWithCriteria[j] = t;
-    }
-    free(arrayCols);
-    free(arrayColsWithCriteria);
-}
+
 
 int main() {
     //int a[] = {0, 1,
@@ -382,7 +368,6 @@ int main() {
    // matrix *ms = createArrayOfMatrixFromArray(a, 4, 3, 2);
      matrix m1 = getMemMatrix(3, 3);
     inputMatrix(m1);
-    insertion(m1);
     // inputMatrix(m2);
    // int a[5]={1,2,3,4,5};
     //printf("%d", countNonDescendingRowsMatrices(ms,4));

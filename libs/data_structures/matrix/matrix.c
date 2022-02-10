@@ -123,26 +123,24 @@ void insertionSortRowsMatrixByRowCriteria(matrix m, int (*criteria)(int *, int))
 // и только потом вычислять значение критерия. Таким образом допускается, что
 // будет использована дополнительная память для значений критерия и столбца матрицы
 void insertionSortColsMatrixByColCriteria(matrix m, int (*criteria)(int *, int)){
-    int *arrayCols=(int *) (malloc(sizeof(int) * m.nCols));
-    int *arrayColsWithCriteria=(int *) (malloc(sizeof(int) * m.nCols));
-    for (int i = 0; i < m.nCols; ++i) {
-        for (int j = 0; j < m.nRows; ++j) {
-            arrayCols[i]=m.values[i][j];
+    int *arrayCols = (int *) (malloc(sizeof(int) * m.nCols));
+    int *arrayColsWithCriteria = (int *) (malloc(sizeof(int) * m.nCols));
+    for (int i = 0; i < m.nRows; ++i) {
+        for (int j = 0; j < m.nCols; ++j) {
+            arrayCols[j] = m.values[j][i];
         }
-    }
-    for (int i = 0; i < m.nCols; ++i) {
-        arrayColsWithCriteria[i]=criteria(arrayCols, m.nRows);
+        arrayColsWithCriteria[i] = criteria(arrayCols, m.nRows);
+        printf("%d", arrayColsWithCriteria[i]);
     }
     for (int i = 1; i < m.nRows; ++i) {
         int t = arrayColsWithCriteria[i];
         int j = i;
         while (j > 0 && arrayColsWithCriteria[j - 1] > t) {
             arrayColsWithCriteria[j] = arrayColsWithCriteria[j - 1];
-            m.values[j] = m.values[j - 1];
+            swapColumns(m, j, j - 1);
             j--;
         }
         arrayColsWithCriteria[j] = t;
-        swapColumns(m, i, j);
     }
     free(arrayCols);
     free(arrayColsWithCriteria);
