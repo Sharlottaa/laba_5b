@@ -366,7 +366,7 @@ void printMatrixWithMaxZeroRows(matrix *ms, int nMatrix){
 }
 
 //15
-
+//поиск максимального вещественного числа по модулю в матрице
 double getMaxMatrixDoublefabs(double **valuesDouble,int row, int col){
     double maxfabs= fabs(valuesDouble[0][0]);
     for (int i = 0; i < row; ++i) {
@@ -378,6 +378,18 @@ double getMaxMatrixDoublefabs(double **valuesDouble,int row, int col){
     }
     return fabs(maxfabs);
 }
+//возвращает минимальный вещественный элемент в одномерном массиве а размера n
+double getMinDouble( double *a, int n) {
+    double min = a[0];
+    for (int i = 1; i < n; ++i) {
+        if (a[i] < min) {
+            min = a[i];
+        }
+    }
+    return min;
+}
+
+void outputMatricesWithMinNorm(double **valuesDouble,int row, int col)
 
 
 
