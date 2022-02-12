@@ -92,7 +92,7 @@ long long getSum( int *a, int n) {
 }
 
 void transposeIfMatrixHasEqualSumOfRows(matrix m) {
-    long long *a = (long long *) calloc(m.nRows, sizeof(long long));
+    int *a = (int *) calloc(m.nRows, sizeof(int));
     assert(a != NULL);
 
     for (register size_t i = 0; i < m.nRows; ++i) {
@@ -185,9 +185,21 @@ int k(matrix m){
 
 //8. Дана прямоугольная матрица, все элементы которой различны. Найти минимальный элемент матрицы в выделенной области:
 
-int getMinInArea(matrix m){
-    position maxIndex= getMaxValuePos(m);
 
+int getMinInArea(matrix m) {
+    position maxIndex = getMaxValuePos(m);
+    int minValue = m.values[maxIndex.rowIndex][maxIndex.colIndex];
+    int left= maxIndex.colIndex;
+    int right= maxIndex.colIndex;
+    for (int i = maxIndex.rowIndex; i >= 0; i--) {
+        for (int j = left; j <= right; ++j) {
+            if (m.values[i][j] < minValue)
+                minValue = m.values[i][j];
+        }
+        left = left > 0 ? left - 1 : left;
+        right = right < m.nCols ? right + 1 : right;
+    }
+    return minValue;
 }
 
 // 9
@@ -356,7 +368,7 @@ void printMatrixWithMaxZeroRows(matrix *ms, int nMatrix){
 //15
 
 
-int main() {
+int main(){
     //int a[] = {0, 1,
                //1, 0,
               // 0, 0,
@@ -366,13 +378,15 @@ int main() {
       //int a[5]={1,0,3,4,0};
    // printf("%d",countValues(a,5,0));
    // matrix *ms = createArrayOfMatrixFromArray(a, 4, 3, 2);
-     matrix m1 = getMemMatrix(3, 3);
+     matrix m1 = getMemMatrix(3,4);
     inputMatrix(m1);
     // inputMatrix(m2);
    // int a[5]={1,2,3,4,5};
     //printf("%d", countNonDescendingRowsMatrices(ms,4));
     //transposeIfMatrixHasEqualSumOfRows(m1);
     //getNSpecialElement(m1);
+    printf("%d",getMinInArea(m1));
+
     //swapPenultimateRow(m1);
      //printf("%d",getLeftMin(m1));
     //maxDiagonalSum(m1);
