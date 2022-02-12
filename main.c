@@ -389,7 +389,25 @@ double getMinDouble( double *a, int n) {
     return min;
 }
 
-void outputMatricesWithMinNorm(double **valuesDouble,int row, int col)
+void outputMatricesWithMinNorm(double **valuesDouble,int row, int col, int nMatrices){
+    double *aMatricesMaxfabs=(double *) malloc(sizeof(double)*nMatrices);
+    for (int i = 0; i < nMatrices; ++i) {
+        aMatricesMaxfabs[i]= getMaxMatrixDoublefabs(valuesDouble,row,col);
+    }
+    double minInMaxfabsMatrices= getMinDouble(aMatricesMaxfabs,nMatrices);
+    for (int i = 0; i < nMatrices; ++i) {
+        if(fabs(aMatricesMaxfabs[i]-minInMaxfabsMatrices)<0.00001){
+            for (int k = 0; i < row; ++i) {
+                printf("|");
+                for (size_t j = 0; j < col; ++j) {
+                    printf("%f ", valuesDouble[k][j]);
+                }
+                printf("\f| \n");
+            }
+        }
+    }
+    free(aMatricesMaxfabs);
+}
 
 
 
