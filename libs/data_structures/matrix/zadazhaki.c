@@ -5,7 +5,7 @@
 #include <time.h>
 #include <stdlib.h>
 #include <assert.h>
-#include "libs\data_structures\matrix\matrix.h"
+#include "matrix.h"
 
 //1. Дана квадратная матрица, все элементы которой различны. Поменять местами
 //строки, в которых находятся максимальный и минимальный элементы.
@@ -266,7 +266,7 @@ int getNSpecialElement(matrix m){
             aColm[i]=m.values[j][i];
         }
         int maxInCol= getMax(aColm,m.nRows);
-         aColmSum[i]= (int)getSum(aColm,m.nRows);
+        aColmSum[i]= (int)getSum(aColm,m.nRows);
         if(aColmSum[i]-maxInCol<maxInCol){
             count++;
         }
@@ -310,9 +310,9 @@ bool isNonDescendingSorted(int *a, int n) {
 }
 bool hasAllNonDescendingRows(matrix m){
     for (int i = 0; i < m.nRows; ++i) {
-            if (!isNonDescendingSorted(m.values[i],m.nCols)) {
-                return 0;
-            }
+        if (!isNonDescendingSorted(m.values[i],m.nCols)) {
+            return 0;
+        }
     }
     return 1;
 }
@@ -408,92 +408,3 @@ void outputMatricesWithMinNorm(double **valuesDouble,int row, int col, int nMatr
     }
     free(aMatricesMaxfabs);
 }
-
-void test_swapRowsMinMax_classic1 () {
-    matrix m1= createMatrixFromArray (
-            (int []) {
-                       1 , 2 , 0 ,
-                       8 , 5 , 1 ,
-                       7 , 9 , 6 ,
-            } ,
-            3 , 3
-    ) ;
-    swapRowsMinMax(m1);
-    matrix m2= createMatrixFromArray (
-            (int []) {
-                    7 , 9 , 6 ,
-                    8 , 5 , 1,
-                    1 , 2 , 0 ,
-            } ,
-            3 , 3
-    ) ;
-    assert (twoMatricesEqual(m1,m2)) ;
-
-    freeMemMatrix (m1) ;
-    freeMemMatrix (m2) ;
-}
-void test_swapRowsMinMax_classic2 () {
-    matrix m1= createMatrixFromArray (
-            (int []) {
-                    7 , 2 , 6 ,
-                    8 , 5 , 1 ,
-                    7 , 9 , 10 ,
-            } ,
-            3 , 3
-    ) ;
-    swapRowsMinMax(m1);
-    matrix m2= createMatrixFromArray (
-            (int []) {
-                    7 , 2 , 6 ,
-                    7 , 9 , 10,
-                    8 , 5 , 1 ,
-            } ,
-            3 , 3
-    ) ;
-    assert (twoMatricesEqual(m1,m2)) ;
-
-    freeMemMatrix (m1) ;
-    freeMemMatrix (m2) ;
-}
-
-void test_swapRowsMinMax_classic3 () {
-    matrix m1= createMatrixFromArray (
-            (int []) {
-                    11 , 2 , 6 ,
-                    8 , 5 , 1 ,
-                    7 , 0 , 10 ,
-            } ,
-            3 , 3
-    ) ;
-    swapRowsMinMax(m1);
-    matrix m2= createMatrixFromArray (
-            (int []) {
-                    7 , 0 , 10 ,
-                    8 , 5 , 1 ,
-                    11, 2, 6,
-            } ,
-            3 , 3
-    ) ;
-    assert (twoMatricesEqual(m1,m2)) ;
-
-    freeMemMatrix (m1) ;
-    freeMemMatrix (m2) ;
-}
-
-
-
-void test_swapRowsMinMax(){
-    test_swapRowsMinMax_classic1();
-    test_swapRowsMinMax_classic2();
-    test_swapRowsMinMax_classic3();
-}
-int main(){
-    test_swapRowsMinMax();
-    return 0;
-}
-
-
-
-
-
-
