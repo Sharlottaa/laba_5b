@@ -28,7 +28,7 @@ int getMax( int *a, int n) {
 }
 
 //сортирует в двумерном массиве по неубыванию максимальные значения в одномерном массиве
-void sortRowsByMinElement(matrix m) {
+void sortRowsByMaxElement(matrix m) {
     insertionSortRowsMatrixByRowCriteria(m,getMax);
 }
 
@@ -409,7 +409,7 @@ void outputMatricesWithMinNorm(double **valuesDouble,int row, int col, int nMatr
     free(aMatricesMaxfabs);
 }
 
-void test_swapRowsMinMax_classic1 () {
+void test_swapRowsMinMax1 () {
     matrix m1= createMatrixFromArray (
             (int []) {
                        1 , 2 , 0 ,
@@ -432,7 +432,7 @@ void test_swapRowsMinMax_classic1 () {
     freeMemMatrix (m1) ;
     freeMemMatrix (m2) ;
 }
-void test_swapRowsMinMax_classic2 () {
+void test_swapRowsMinMax2 () {
     matrix m1= createMatrixFromArray (
             (int []) {
                     7 , 2 , 6 ,
@@ -456,39 +456,201 @@ void test_swapRowsMinMax_classic2 () {
     freeMemMatrix (m2) ;
 }
 
-void test_swapRowsMinMax_classic3 () {
+void test_swapRowsMinMax3 () {
     matrix m1= createMatrixFromArray (
-            (int []) {
-                    11 , 2 , 6 ,
-                    8 , 5 , 1 ,
-                    7 , 0 , 10 ,
-            } ,
-            3 , 3
-    ) ;
+            (int[]) {
+                    1, 2, 3, 5,
+                    11, 2, 6, 14,
+                    8, 5, 1, 4,
+                    7, 0, 10, 3,
+            },
+            4, 4
+    );
     swapRowsMinMax(m1);
-    matrix m2= createMatrixFromArray (
-            (int []) {
-                    7 , 0 , 10 ,
-                    8 , 5 , 1 ,
-                    11, 2, 6,
-            } ,
-            3 , 3
-    ) ;
-    assert (twoMatricesEqual(m1,m2)) ;
+    matrix m2 = createMatrixFromArray(
+            (int[]) {
+                    1, 2, 3, 5,
+                    7, 0, 10, 3,
+                    8, 5, 1, 4,
+                    11, 2, 6, 14,
+            },
+            4, 4
+    );
+    assert (twoMatricesEqual(m1, m2));
 
-    freeMemMatrix (m1) ;
-    freeMemMatrix (m2) ;
+    freeMemMatrix(m1);
+    freeMemMatrix(m2);
+}
+
+
+void test_swapRowsMinMax() {
+    test_swapRowsMinMax1();
+    test_swapRowsMinMax2();
+    test_swapRowsMinMax3();
+}
+
+void test_sortRowsByMaxElement_classic() {
+    matrix m1 = createMatrixFromArray(
+            (int[]) {
+                    7, 2, 6,
+                    18, 5, 1,
+                    7, 9, 10,
+            },
+            3, 3
+    );
+    sortRowsByMaxElement(m1);
+    matrix m2 = createMatrixFromArray(
+            (int[]) {
+                    7, 2, 6,
+                    7, 9, 10,
+                    18, 5, 1,
+            },
+            3, 3
+    );
+    assert (twoMatricesEqual(m1, m2));
+
+    freeMemMatrix(m1);
+    freeMemMatrix(m2);
+}
+
+void test_sortRowsByMaxElement_maxEqual() {
+    matrix m1 = createMatrixFromArray(
+            (int[]) {
+                    7, 18, 6,
+                    18, 5, 1,
+                    7, 9, 18,
+            },
+            3, 3
+    );
+    sortRowsByMaxElement(m1);
+    matrix m2 = createMatrixFromArray(
+            (int[]) {
+                    7, 18, 6,
+                    18, 9, 10,
+                    18, 5, 18,
+            },
+            3, 3
+    );
+    assert (twoMatricesEqual(m1, m2));
+
+    freeMemMatrix(m1);
+    freeMemMatrix(m2);
+}
+
+void test_sortRowsByMaxElement_rows_Equal() {
+    matrix m1 = createMatrixFromArray(
+            (int[]) {
+                    7, 7, 7,
+                    8, 8, 8,
+                    1, 1, 1,
+            },
+            3, 3
+    );
+    sortRowsByMaxElement(m1);
+    matrix m2 = createMatrixFromArray(
+            (int[]) {
+                    1, 1, 1,
+                    7, 7, 7,
+                    8, 8, 8,
+            },
+            3, 3
+    );
+    assert (twoMatricesEqual(m1, m2));
+
+    freeMemMatrix(m1);
+    freeMemMatrix(m2);
+}
+
+void test_sortRowsByMaxElement() {
+    test_sortRowsByMaxElement_classic();
+    test_sortRowsByMaxElement_maxEqual();
+    test_sortRowsByMaxElement_rows_Equal();
+}
+
+void test_sortColsByMinElement_classic() {
+    matrix m1 = createMatrixFromArray(
+            (int[]) {
+                    1, 2, 6,
+                    18, -8, 0,
+                    7, 9, 10,
+            },
+            3, 3
+    );
+    sortColsByMinElement(m1);
+    matrix m2 = createMatrixFromArray(
+            (int[]) {
+                    2, 6, 1,
+                    -8, 0, 18,
+                    9, 10, 7,
+            },
+            3, 3
+    );
+    assert (twoMatricesEqual(m1, m2));
+
+    freeMemMatrix(m1);
+    freeMemMatrix(m2);
+}
+
+void test_sortColsByMinElement_minEqual() {
+    matrix m1 = createMatrixFromArray(
+            (int[]) {
+                    7, -8, 6,
+                    -8, 5, 1,
+                    7, 9, -8,
+            },
+            3, 3
+    );
+    sortColsByMinElement(m1);
+    matrix m2 = createMatrixFromArray(
+            (int[]) {
+                    7, -8, 6,
+                    -8, 5, 1,
+                    7, 9, -8,
+            },
+            3, 3
+    );
+    assert (twoMatricesEqual(m1, m2));
+
+    freeMemMatrix(m1);
+    freeMemMatrix(m2);
+}
+
+void test_sortColsByMinElement_cols_Equal() {
+    matrix m1 = createMatrixFromArray(
+            (int[]) {
+                    6, 1, 7,
+                    6, 1, 7,
+                    6, 1, 7,
+            },
+            3, 3
+    );
+    sortColsByMinElement(m1);
+    matrix m2 = createMatrixFromArray(
+            (int[]) {
+                    1, 6, 7,
+                    1, 6, 7,
+                    1, 6, 7,
+            },
+            3, 3
+    );
+    assert (twoMatricesEqual(m1, m2));
+
+    freeMemMatrix(m1);
+    freeMemMatrix(m2);
+}
+
+void test_sortColsByMinElement() {
+    test_sortColsByMinElement_classic();
+    test_sortColsByMinElement_minEqual();
+    test_sortColsByMinElement_cols_Equal();
 }
 
 
 
-void test_swapRowsMinMax(){
-    test_swapRowsMinMax_classic1();
-    test_swapRowsMinMax_classic2();
-    test_swapRowsMinMax_classic3();
-}
-int main(){
+int main() {
     test_swapRowsMinMax();
+    test_sortRowsByMaxElement();
+    test_sortColsByMinElement();
     return 0;
 }
 

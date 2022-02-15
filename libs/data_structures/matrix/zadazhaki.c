@@ -28,7 +28,7 @@ int getMax( int *a, int n) {
 }
 
 //сортирует в двумерном массиве по неубыванию максимальные значения в одномерном массиве
-void sortRowsByMinElement(matrix m) {
+void sortRowsByMaxElement(matrix m) {
     insertionSortRowsMatrixByRowCriteria(m,getMax);
 }
 
