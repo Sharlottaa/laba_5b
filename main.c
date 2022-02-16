@@ -639,6 +639,8 @@ void test_sortColsByMinElement_cols_Equal() {
     freeMemMatrix(m2);
 }
 
+
+
 void test_sortColsByMinElement() {
     test_sortColsByMinElement_classic();
     test_sortColsByMinElement_minEqual();

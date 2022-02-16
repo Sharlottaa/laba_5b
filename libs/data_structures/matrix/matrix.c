@@ -1,7 +1,8 @@
 #include "matrix.h"
 #include <stdio.h>
 #include <malloc.h>
-
+#include <stdlib.h>
+#include <string.h>
 
 
 matrix getMemMatrix(int nRows, int nCols) {
@@ -91,11 +92,6 @@ void swapColumns(matrix m, int j1, int j2) {
     }
 }
 
-//выполняет сортировку вставками строк
-//матрицы m по неубыванию значения функции criteria применяемой для строк
-//В процессе сортировки создайте вспомогательный массив из nRows элементов, найдите значение
-//функции для каждого ряда и выполните сортировку данного массива. В процессе обмена элементов
-//полученного массива производите обмен строк при помощи swapRows.
 void insertionSortRowsMatrixByRowCriteria(matrix m, int (*criteria)(int *, int)) {
 
     int *arrayRowsWithCriteria = (int *) (malloc(sizeof(int) * m.nRows));
@@ -115,14 +111,8 @@ void insertionSortRowsMatrixByRowCriteria(matrix m, int (*criteria)(int *, int))
     free(arrayRowsWithCriteria);
 
 }
-//выполняет сортировку вставками
-//столбцов матрицы m по неубыванию значения функции criteria применяемой для столбцов
-//7В отличии от прошлого случая, функция применяется к столбцам матрицы. Однако функция критерий
-// ожидает указатель на последовательный участок памяти. Но в силу такого размещения
-//матриц это невозможно, поэтому придётся выполнить копирование столбца в промежуточный массив
-// и только потом вычислять значение критерия. Таким образом допускается, что
-// будет использована дополнительная память для значений критерия и столбца матрицы
-void insertionSortColsMatrixByColCriteria(matrix m, int (*criteria)(int *, int)){
+
+void insertionSortColsMatrixByColCriteria(matrix m, int (*criteria)(int *, int)) {
     int *arrayCols = (int *) (malloc(sizeof(int) * m.nCols));
     int *arrayColsWithCriteria = (int *) (malloc(sizeof(int) * m.nCols));
     for (int i = 0; i < m.nRows; ++i) {
@@ -130,7 +120,6 @@ void insertionSortColsMatrixByColCriteria(matrix m, int (*criteria)(int *, int))
             arrayCols[j] = m.values[j][i];
         }
         arrayColsWithCriteria[i] = criteria(arrayCols, m.nRows);
-        printf("%d", arrayColsWithCriteria[i]);
     }
     for (int i = 1; i < m.nRows; ++i) {
         int t = arrayColsWithCriteria[i];
@@ -146,17 +135,19 @@ void insertionSortColsMatrixByColCriteria(matrix m, int (*criteria)(int *, int))
     free(arrayColsWithCriteria);
 }
 
-bool isSquareMatrix(matrix m){return m.nRows==m.nCols;}
+bool isSquareMatrix(matrix m) { return m.nRows == m.nCols; }
 
 bool twoMatricesEqual(matrix m1, matrix m2) {
-    for (int i = 0; i < m1.nRows; ++i) {
-        for (int j = 0; j < m1.nCols; ++j) {
-            if (m1.values[i][j] == m2.values[i][j]) {
-                return m1.nRows == m2.nRows && m1.nCols == m2.nCols;
-            } else {
+    if(m1.nRows == m2.nRows && m1.nCols == m2.nCols) {
+
+        for (int i = 0; i < m1.nRows; ++i) {
+            if (memcmp(m1.values[i], m2.values[i], sizeof(int) * m1.nCols) != 0) {
                 return 0;
             }
         }
+        return 1;
+    }else{
+        return 0;
     }
 }
 
@@ -172,12 +163,12 @@ bool isEMatrix(matrix m) {
     return isIdentityMatrix;
 }
 
-bool isSymmetricMatrix(matrix m){
+bool isSymmetricMatrix(matrix m) {
     bool isSymmetric = true;
     for (int i = 0; i < m.nRows; ++i) {
-        for (int j = 0; j < m.nCols; ++j) {
-            if(m.values[i][j]!=m.values[j][i]){
-                isSymmetric=false;
+        for (int j = i+1; j < m.nCols; ++j) {
+            if (m.values[i][j] != m.values[j][i]) {
+                isSymmetric = false;
             }
         }
     }
@@ -186,44 +177,42 @@ bool isSymmetricMatrix(matrix m){
 
 void transposeSquareMatrix(matrix m) {
     for (int i = 1; i < m.nCols; ++i) {
-        for (int j = 0; j < i; ++j) {
-            swap(&m.values[i][j], &m.values[j][i], sizeof(int));
-        }
+            swap(&m.values[0][i], &m.values[i][0], sizeof(int));
     }
 }
 
-position getMinValuePos(matrix m){
-    int minValue=m.values[0][0];
-    position minIndex={0,0};
+position getMinValuePos(matrix m) {
+    int minValue = m.values[0][0];
+    position minIndex = {0, 0};
     for (int i = 0; i < m.nRows; ++i) {
         for (int j = 0; j < m.nCols; ++j) {
-            if(m.values[i][j]<minValue){
-                minValue=m.values[i][j];
-                minIndex.rowIndex=i;
-                minIndex.colIndex=j;
+            if (m.values[i][j] < minValue) {
+                minValue = m.values[i][j];
+                minIndex.rowIndex = i;
+                minIndex.colIndex = j;
             }
         }
     }
     return minIndex;
 }
 
-position getMaxValuePos(matrix m){
-    int maxValue=m.values[0][0];
-    position maxIndex={0, 0};
+position getMaxValuePos(matrix m) {
+    int maxValue = m.values[0][0];
+    position maxIndex = {0, 0};
     for (int i = 0; i < m.nRows; ++i) {
         for (int j = 0; j < m.nCols; ++j) {
-            if(m.values[i][j] > maxValue){
-                maxValue=m.values[i][j];
-                maxIndex.rowIndex=i;
-                maxIndex.colIndex=j;
+            if (m.values[i][j] > maxValue) {
+                maxValue = m.values[i][j];
+                maxIndex.rowIndex = i;
+                maxIndex.colIndex = j;
             }
         }
     }
     return maxIndex;
 }
 
-matrix createMatrixFromArray(const int *a, int nRows, int nCols){
-    matrix m = getMemMatrix ( nRows , nCols ) ;
+matrix createMatrixFromArray(const int *a, int nRows, int nCols) {
+    matrix m = getMemMatrix(nRows, nCols);
 
     int k = 0;
     for (int i = 0; i < nRows; i++)

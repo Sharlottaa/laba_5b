@@ -1,5 +1,6 @@
 #ifndef CLIONPROJECTS_MATRIX_H
 #define CLIONPROJECTS_MATRIX_H
+
 #include <stdbool.h>
 
 typedef struct matrix {
@@ -80,4 +81,5 @@ matrix createMatrixFromArray(const int *a, int nRows, int nCols);
 //возвращает указатель на нулевую матрицу массива из nMatrices матриц, размещенных
 //в динамической памяти, построенных из элементов массива a:
 matrix *createArrayOfMatrixFromArray(const int *values, int nMatrices, int nRows, int nCols);
+
 #endif
