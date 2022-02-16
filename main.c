@@ -526,8 +526,8 @@ void test_sortRowsByMaxElement_maxEqual() {
     matrix m2 = createMatrixFromArray(
             (int[]) {
                     7, 18, 6,
-                    18, 9, 10,
-                    18, 5, 18,
+                    18, 5, 1,
+                    7, 9, 18,
             },
             3, 3
     );
@@ -648,11 +648,91 @@ void test_sortColsByMinElement() {
 }
 
 
+void test_getSquareOfMatrixIfSymmetric1() {
+    matrix m1 = createMatrixFromArray(
+            (int[]) {
+                    3
+            },
+            1, 1
+    );
+    getSquareOfMatrixIfSymmetric(&m1);
+
+    matrix m2 = createMatrixFromArray(
+            (int[]) {
+                    9
+            },
+            1, 1
+    );
+
+    assert(twoMatricesEqual(m1, m2));
+
+    freeMemMatrix(m1);
+    freeMemMatrix(m2);
+}
+
+
+void test_getSquareOfMatrixIfSymmetric2() {
+    matrix m1 = createMatrixFromArray(
+            (int[]) {
+                    1, 2,
+                    2, 1
+            },
+            2, 2
+    );
+    getSquareOfMatrixIfSymmetric(&m1);
+
+    matrix m2 = createMatrixFromArray(
+            (int[]) {
+                    5, 4,
+                    4, 5
+            },
+            2, 2
+    );
+
+    assert(twoMatricesEqual(m1, m2));
+
+    freeMemMatrix(m1);
+    freeMemMatrix(m2);
+}
+
+void test_getSquareOfMatrixIfSymmetric3() {
+    matrix m1 = createMatrixFromArray(
+            (int[]) {
+                    5, 1, 3,
+                    1, 3, 5,
+                    3, 5, 5
+            },
+            3, 3
+    );
+    getSquareOfMatrixIfSymmetric(&m1);
+
+    matrix m2 = createMatrixFromArray(
+            (int[]) {
+                    35, 23, 35,
+                    23, 35, 43,
+                    35, 43, 59
+            },
+            3, 3
+    );
+
+    assert(twoMatricesEqual(m1, m2));
+
+    freeMemMatrix(m1);
+    freeMemMatrix(m2);
+}
+
+
+void test_getSquareOfMatrixIfSymmetric() {
+    test_getSquareOfMatrixIfSymmetric1();
+    test_getSquareOfMatrixIfSymmetric2();
+    test_getSquareOfMatrixIfSymmetric3();
+}
 
 int main() {
     test_swapRowsMinMax();
     test_sortRowsByMaxElement();
     test_sortColsByMinElement();
+    test_getSquareOfMatrixIfSymmetric();
     return 0;
 }
 
