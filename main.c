@@ -886,6 +886,57 @@ void test_isMutuallyInverseMatrices() {
     test_isMutuallyInverseMatrices3();
 }
 
+void test_findSumOfMaxesOfPseudoDiagonal1() {
+    matrix m1 = createMatrixFromArray(
+            (int[]) {
+                    1, 2, 3,
+                    4, 5, 6,
+                    7, 8, 9,
+            },
+            3, 3
+    );
+
+    assert(findSumOfMaxesOfPseudoDiagonal(m1) == 24);
+
+    freeMemMatrix(m1);
+}
+
+void test_findSumOfMaxesOfPseudoDiagonal2() {
+    matrix m1 = createMatrixFromArray(
+            (int[]) {
+                    7,
+            },
+            1, 1
+    );
+
+    assert(findSumOfMaxesOfPseudoDiagonal(m1) == 0);
+
+    freeMemMatrix(m1);
+}
+
+void test_findSumOfMaxesOfPseudoDiagonal3() {
+    matrix m1 = createMatrixFromArray(
+            (int[]) {
+                    2, 6, 7, 5,
+                    1, 9, 10, 4,
+                    11, 3, 4, 5,
+            },
+            3, 4
+    );
+
+    assert(findSumOfMaxesOfPseudoDiagonal(m1) == 36);
+
+    freeMemMatrix(m1);
+}
+
+
+void test_findSumOfMaxesOfPseudoDiagonal() {
+    test_findSumOfMaxesOfPseudoDiagonal1();
+    test_findSumOfMaxesOfPseudoDiagonal2();
+    test_findSumOfMaxesOfPseudoDiagonal3();
+}
+
+
 int main() {
     test_swapRowsMinMax();
     test_sortRowsByMaxElement();
@@ -893,6 +944,7 @@ int main() {
     test_getSquareOfMatrixIfSymmetric();
     test_transposeIfMatrixHasEqualSumOfRows();
     test_isMutuallyInverseMatrices();
+    test_findSumOfMaxesOfPseudoDiagonal();
     return 0;
 }
 
