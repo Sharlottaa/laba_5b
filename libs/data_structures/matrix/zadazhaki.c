@@ -95,7 +95,7 @@ void transposeIfMatrixHasEqualSumOfRows(matrix m) {
     assert(a != NULL);
 
     for (register size_t i = 0; i < m.nRows; ++i) {
-        a[i] += getSum(m.values[i], m.nCols);
+        a[i] += (int)getSum(m.values[i], m.nCols);
     }
     if (isUnique(a, m.nRows)) {
         transposeSquareMatrix(m);

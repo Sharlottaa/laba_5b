@@ -177,10 +177,11 @@ bool isSymmetricMatrix(matrix m) {
 
 void transposeSquareMatrix(matrix m) {
     for (int i = 1; i < m.nCols; ++i) {
-            swap(&m.values[0][i], &m.values[i][0], sizeof(int));
+        for (int j = 0; j < i; ++j) {
+            swap(&m.values[i][j], &m.values[j][i], sizeof(int));
+        }
     }
 }
-
 position getMinValuePos(matrix m) {
     int minValue = m.values[0][0];
     position minIndex = {0, 0};

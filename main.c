@@ -728,11 +728,93 @@ void test_getSquareOfMatrixIfSymmetric() {
     test_getSquareOfMatrixIfSymmetric3();
 }
 
+void test_transposeIfMatrixHas_NOT_EqualSumOfRows1() {
+    matrix m1 = createMatrixFromArray(
+            (int[]) {
+                    3, 2,
+                    5, 0,
+            },
+            2, 2
+    );
+    transposeIfMatrixHasEqualSumOfRows(m1);
+
+    matrix m2 = createMatrixFromArray(
+            (int[]) {
+                    3, 2,
+                    5, 0,
+            },
+            2, 2
+    );
+
+    assert(twoMatricesEqual(m1, m2));
+
+    freeMemMatrix(m1);
+    freeMemMatrix(m2);
+}
+
+void test_transposeIfMatrixHasEqualSumOfRows2() {
+    matrix m1 = createMatrixFromArray(
+            (int[]) {
+                    3, 5, 4,
+                    1, 0, 8,
+                    1, 0, 9,
+            },
+            3, 3
+    );
+    transposeIfMatrixHasEqualSumOfRows(m1);
+
+    matrix m2 = createMatrixFromArray(
+            (int[]) {
+                    3, 1, 1,
+                    5, 0, 0,
+                    4, 8, 9,
+            },
+            3, 3
+    );
+
+    assert(twoMatricesEqual(m1, m2));
+
+    freeMemMatrix(m1);
+    freeMemMatrix(m2);
+}
+
+void test_transposeIfMatrixHasEqualSumOfRows3() {
+    matrix m1 = createMatrixFromArray(
+            (int[]) {
+                    1, 1,
+                    2, 2,
+            },
+            2, 2
+    );
+    transposeIfMatrixHasEqualSumOfRows(m1);
+
+    matrix m2 = createMatrixFromArray(
+            (int[]) {
+                    1, 2,
+                    1, 2,
+            },
+            2, 2
+    );
+
+    assert(twoMatricesEqual(m1, m2));
+
+    freeMemMatrix(m1);
+    freeMemMatrix(m2);
+}
+
+
+void test_transposeIfMatrixHasEqualSumOfRows() {
+    test_transposeIfMatrixHas_NOT_EqualSumOfRows1();
+    test_transposeIfMatrixHasEqualSumOfRows2();
+    test_transposeIfMatrixHasEqualSumOfRows3();
+}
+
 int main() {
     test_swapRowsMinMax();
     test_sortRowsByMaxElement();
     test_sortColsByMinElement();
     test_getSquareOfMatrixIfSymmetric();
+    test_transposeIfMatrixHasEqualSumOfRows();
     return 0;
 }
 
