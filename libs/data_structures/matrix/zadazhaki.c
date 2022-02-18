@@ -284,7 +284,7 @@ bool isNonDescendingSorted(int *a, int n) {
 
 bool hasAllNonDescendingRows(matrix m) {
     for (int i = 0; i < m.nRows; ++i) {
-        if (!isNonDescendingSorted(m.values[i], m.nCols)) {
+        if (isNonDescendingSorted(m.values[i], m.nCols)) {
             return 0;
         }
     }
