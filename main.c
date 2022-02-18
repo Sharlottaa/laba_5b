@@ -1011,6 +1011,7 @@ void test_sortByDistances1(){
             },
             3, 3
     );
+    assert(twoMatricesEqual(m1, m2));
 
     freeMemMatrix(m1);
     freeMemMatrix(m2);
@@ -1035,6 +1036,8 @@ void test_sortByDistances2(){
             3, 3
     );
 
+    assert(twoMatricesEqual(m1, m2));
+
     freeMemMatrix(m1);
     freeMemMatrix(m2);
 }
@@ -1057,6 +1060,8 @@ void test_sortByDistances3(){
             },
             3, 3
     );
+
+    assert(twoMatricesEqual(m1, m2));
 
     freeMemMatrix(m1);
     freeMemMatrix(m2);
@@ -1172,6 +1177,89 @@ void test_getNSpecialElement() {
     test_getNSpecialElement3();
 }
 
+void test_swapPenultimateRow1(){
+    matrix m1 = createMatrixFromArray(
+            (int[]) {
+                    1,2,3,
+                    4,5,6,
+                    7,8,1,
+            },
+            3, 3
+    );
+    swapPenultimateRow(m1);
+    matrix m2 = createMatrixFromArray(
+            (int[]) {
+                    1,2,3,
+                    1,4,7,
+                    7,8,1,
+            },
+            3, 3
+    );
+
+    assert(twoMatricesEqual(m1, m2));
+
+    freeMemMatrix(m1);
+    freeMemMatrix(m2);
+}
+
+void test_swapPenultimateRow2(){
+    matrix m1 = createMatrixFromArray(
+            (int[]) {
+                    5, 2, 5,
+                    6, 1, 8,
+                    9, 10, 11,
+            },
+            3, 3
+    );
+    swapPenultimateRow(m1);
+    matrix m2 = createMatrixFromArray(
+            (int[]) {
+                    5, 2, 5,
+                    2, 1, 10,
+                    9, 10, 11,
+            },
+            3, 3
+    );
+
+    assert(twoMatricesEqual(m1, m2));
+
+    freeMemMatrix(m1);
+    freeMemMatrix(m2);
+}
+
+void test_swapPenultimateRow3(){
+    matrix m1 = createMatrixFromArray(
+            (int[]) {
+                    5, 2, 8,
+                    6, 2, 1,
+                    9, 10, 11,
+            },
+            3, 3
+    );
+    swapPenultimateRow(m1);
+    matrix m2 = createMatrixFromArray(
+            (int[]) {
+                    5, 2, 8,
+                    8, 1, 11,
+                    9, 10, 11,
+            },
+            3, 3
+    );
+
+    assert(twoMatricesEqual(m1, m2));
+
+    freeMemMatrix(m1);
+    freeMemMatrix(m2);
+}
+
+void test_swapPenultimateRow() {
+    test_swapPenultimateRow1();
+    test_swapPenultimateRow2();
+    test_swapPenultimateRow3();
+}
+
+
+
 int main() {
     test_swapRowsMinMax();
     test_sortRowsByMaxElement();
@@ -1184,6 +1272,7 @@ int main() {
     test_sortByDistances();
     test_countEqClassesByRowsSum();
     test_getNSpecialElement();
+    test_swapPenultimateRow();
     return 0;
 }
 
