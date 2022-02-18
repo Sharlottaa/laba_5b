@@ -135,7 +135,7 @@ void k_(matrix m) {
 
 int max(int a, int b) { return a < b ? b : a; }
 
-void append(int *a, int *n, const int value) {
+void append(int *a, int *n, int value) {
     a[*n] = value;
     (*n)++;
 }
@@ -151,7 +151,7 @@ int getMaxValueOfPseudoDiagonal(matrix m, int row, int col){
     return maxValue;
 }
 
-long long findSumOfMaxesOfPseudoDiagonal(matrix m) {
+int findSumOfMaxesOfPseudoDiagonal(matrix m) {
     int *sumMax = (int *) malloc(sizeof(int) * (m.nRows + m.nCols - 1));
     int size = 0;
 
@@ -166,20 +166,9 @@ long long findSumOfMaxesOfPseudoDiagonal(matrix m) {
         append(sumMax, &size, maxValueDown);
     }
 
-    long long sum = getSum(sumMax, size);
+    int sum = (int)getSum(sumMax, size);
     free(sumMax);
-    return sum;
-}
 
-
-int k(matrix m){
-    int sum = 0;
-    for (int i =0; i < m.nRows; i++)
-        for (int j = 0; j < m.nCols; ++j) {
-            if(i==j){
-                sum+=m.values[i][j];
-            }
-        }
     return sum;
 }
 
@@ -917,14 +906,13 @@ void test_findSumOfMaxesOfPseudoDiagonal2() {
 void test_findSumOfMaxesOfPseudoDiagonal3() {
     matrix m1 = createMatrixFromArray(
             (int[]) {
-                    2, 6, 7, 5,
-                    1, 9, 10, 4,
-                    11, 3, 4, 5,
-            },
-            3, 4
+                    3, 2, 5, 4,
+                    1, 3, 6, 8,
+                    3, 2, 1, 3,
+            }, 3, 4
     );
 
-    assert(findSumOfMaxesOfPseudoDiagonal(m1) == 36);
+    assert(findSumOfMaxesOfPseudoDiagonal(m1) == 23);
 
     freeMemMatrix(m1);
 }
@@ -937,6 +925,58 @@ void test_findSumOfMaxesOfPseudoDiagonal() {
 }
 
 
+void test_getMinInArea1(){
+    matrix m1 = createMatrixFromArray(
+            (int[]) {
+                    10, 0, 7,
+                    3, 11, 8,
+                    4, 1, 12,
+            },
+            3, 3
+    );
+
+    assert(getMinInArea(m1) == 0);
+
+    freeMemMatrix(m1);
+}
+
+void test_getMinInArea2(){
+    matrix m1 = createMatrixFromArray(
+            (int[]) {
+                    -7, 2, -8,
+                    21, 47, 9,
+                    23, 11, 25,
+            },
+            3, 3
+    );
+
+    assert(getMinInArea(m1) == -8);
+
+    freeMemMatrix(m1);
+}
+
+void test_getMinInArea3(){
+    matrix m1 = createMatrixFromArray(
+            (int[]) {
+                    -7, 2, 1, 7, 5,
+                    21, 1, 30, 10, 4,
+                    23, 11, 25, 4, 5,
+            },
+            3, 5
+    );
+
+    assert(getMinInArea(m1) == 1);
+
+    freeMemMatrix(m1);
+}
+
+void test_getMinInArea() {
+    test_getMinInArea1();
+    test_getMinInArea2();
+   test_getMinInArea3();
+}
+
+
 int main() {
     test_swapRowsMinMax();
     test_sortRowsByMaxElement();
@@ -945,6 +985,8 @@ int main() {
     test_transposeIfMatrixHasEqualSumOfRows();
     test_isMutuallyInverseMatrices();
     test_findSumOfMaxesOfPseudoDiagonal();
+    test_getMinInArea();
+
     return 0;
 }
 

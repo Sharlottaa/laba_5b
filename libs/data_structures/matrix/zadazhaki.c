@@ -134,7 +134,7 @@ int getMaxValueOfPseudoDiagonal(matrix m, int row, int col) {
     return maxValue;
 }
 
-long long findSumOfMaxesOfPseudoDiagonal(matrix m) {
+int findSumOfMaxesOfPseudoDiagonal(matrix m) {
     int *sumMax = (int *) malloc(sizeof(int) * (m.nRows + m.nCols - 1));
     int size = 0;
 
@@ -149,7 +149,7 @@ long long findSumOfMaxesOfPseudoDiagonal(matrix m) {
         append(sumMax, &size, maxValueDown);
     }
 
-    long long sum = getSum(sumMax, size);
+    int sum = (int)getSum(sumMax, size);
     free(sumMax);
     return sum;
 }
