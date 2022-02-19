@@ -341,12 +341,12 @@ void printMatrixWithMaxZeroRows(matrix *ms, int nMatrix) {
 
 //15
 //поиск максимального вещественного числа по модулю в матрице
-double getMaxMatrixDoublefabs(double **valuesDouble, int row, int col) {
-    double maxfabs = fabs(valuesDouble[0][0]);
-    for (int i = 0; i < row; ++i) {
-        for (int j = 0; j < col; ++j) {
-            if (maxfabs < fabs(valuesDouble[i][j])) {
-                maxfabs = fabs(valuesDouble[i][j]);
+double getMaxMatrixDoublefabs(matrixDouble m) {
+    double maxfabs = fabs(m.valueDouble[0][0]);
+    for (int i = 0; i < m.row; ++i) {
+        for (int j = 0; j < m.col; ++j) {
+            if (maxfabs < fabs(m.valueDouble[i][j])) {
+                maxfabs = fabs(m.valueDouble[i][j]);
             }
         }
     }
@@ -364,18 +364,18 @@ double getMinDouble(double *a, int n) {
     return min;
 }
 
-void outputMatricesWithMinNorm(double **valuesDouble, int row, int col, int nMatrices) {
+void outputMatricesWithMinNorm(matrixDouble m,int nMatrices) {
     double *aMatricesMaxfabs = (double *) malloc(sizeof(double) * nMatrices);
     for (int i = 0; i < nMatrices; ++i) {
-        aMatricesMaxfabs[i] = getMaxMatrixDoublefabs(valuesDouble, row, col);
+        aMatricesMaxfabs[i] = getMaxMatrixDoublefabs(m);
     }
     double minInMaxfabsMatrices = getMinDouble(aMatricesMaxfabs, nMatrices);
     for (int i = 0; i < nMatrices; ++i) {
         if (fabs(aMatricesMaxfabs[i] - minInMaxfabsMatrices) < 0.00001) {
-            for (int k = 0; i < row; ++i) {
+            for (int k = 0; i < m.row; ++i) {
                 printf("|");
-                for (size_t j = 0; j < col; ++j) {
-                    printf("%f ", valuesDouble[k][j]);
+                for (int j = 0; j < m.col; ++j) {
+                    printf("%f ", m.valueDouble[k][j]);
                 }
                 printf("\f| \n");
             }

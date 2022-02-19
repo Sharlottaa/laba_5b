@@ -15,6 +15,12 @@ typedef struct position {
     int colIndex;
 } position;
 
+typedef struct matrixDouble {
+    double **valueDouble; // элементы матрицы
+    int row; // количество рядов
+    int col; // количество столбцов
+} matrixDouble;
+
 //размещает в динамической памяти матрицу размером nRows на nCols. Возвращает матрицу
 matrix getMemMatrix(int nRows, int nCols);
 
@@ -82,4 +88,15 @@ matrix createMatrixFromArray(const int *a, int nRows, int nCols);
 //в динамической памяти, построенных из элементов массива a:
 matrix *createArrayOfMatrixFromArray(const int *values, int nMatrices, int nRows, int nCols);
 
+matrixDouble getMemMatrixDouble(int row, int col);
+
+matrixDouble *getMemArrayOfMatricesDouble(int nMatrices, int row, int col);
+
+void freeMemMatrixDouble(matrixDouble m);
+
+void freeMemMatricesDouble(matrixDouble *ms, int nMatrices);
+
+matrixDouble *createArrayOfMatrixFromArrayDouble(const double *values, int nMatrices, int row, int col);
+
+void outputMatrixDouble(matrixDouble m);
 #endif

@@ -374,19 +374,20 @@ void printMatrixWithMaxZeroRows(matrix *ms, int nMatrix){
 
 //15
 //поиск максимального вещественного числа по модулю в матрице
-double getMaxMatrixDoublefabs(double **valuesDouble,int row, int col){
-    double maxfabs= fabs(valuesDouble[0][0]);
-    for (int i = 0; i < row; ++i) {
-        for (int j = 0; j < col; ++j) {
-            if(maxfabs< fabs(valuesDouble[i][j])){
-                maxfabs= fabs(valuesDouble[i][j]);
+double getMaxMatrixDoublefabs(matrixDouble m) {
+    double maxfabs = fabs(m.valueDouble[0][0]);
+    for (int i = 0; i < m.row; ++i) {
+        for (int j = 0; j < m.col; ++j) {
+            if (maxfabs < fabs(m.valueDouble[i][j])) {
+                maxfabs = fabs(m.valueDouble[i][j]);
             }
         }
     }
     return fabs(maxfabs);
 }
+
 //возвращает минимальный вещественный элемент в одномерном массиве а размера n
-double getMinDouble( double *a, int n) {
+double getMinDouble(double *a, int n) {
     double min = a[0];
     for (int i = 1; i < n; ++i) {
         if (a[i] < min) {
@@ -396,21 +397,15 @@ double getMinDouble( double *a, int n) {
     return min;
 }
 
-void outputMatricesWithMinNorm(double **valuesDouble,int row, int col, int nMatrices) {
+void outputMatricesWithMinNorm(matrixDouble *ms,int nMatrices) {
     double *aMatricesMaxfabs = (double *) malloc(sizeof(double) * nMatrices);
     for (int i = 0; i < nMatrices; ++i) {
-        aMatricesMaxfabs[i] = getMaxMatrixDoublefabs(valuesDouble, row, col);
+        aMatricesMaxfabs[i] = getMaxMatrixDoublefabs(ms[i]);
     }
     double minInMaxfabsMatrices = getMinDouble(aMatricesMaxfabs, nMatrices);
     for (int i = 0; i < nMatrices; ++i) {
-        if (fabs(aMatricesMaxfabs[i] - minInMaxfabsMatrices) < 0.00001) {
-            for (int k = 0; i < row; ++i) {
-                printf("|");
-                for (size_t j = 0; j < col; ++j) {
-                    printf("%f ", valuesDouble[k][j]);
-                }
-                printf("\f| \n");
-            }
+        if (fabs(aMatricesMaxfabs[i] - minInMaxfabsMatrices) < 0.0000001) {
+            outputMatrixDouble(ms[i]);
         }
     }
     free(aMatricesMaxfabs);
@@ -1340,8 +1335,7 @@ void test_countNonDescendingRowsMatrices() {
     test_countNonDescendingRowsMatrices2();
     test_countNonDescendingRowsMatrices3();
 }
-
-int main() {
+void test(){
     test_swapRowsMinMax();
     test_sortRowsByMaxElement();
     test_sortColsByMinElement();
@@ -1355,6 +1349,23 @@ int main() {
     test_getNSpecialElement();
     test_swapPenultimateRow();
     test_countNonDescendingRowsMatrices();
+}
+
+
+int main() {
+    matrixDouble *ms = createArrayOfMatrixFromArrayDouble((double []) {
+                                                                  -3.4, 4.5,
+                                                                  3.4, -3.9,
+                                                                  ////
+                                                                  9.4, 8.4,
+                                                                  2.3, -23.4,
+                                                                  ////
+                                                                  2.1, 4.5,
+                                                                  10.3,-45.5,
+                                                          },
+                                                          3, 2, 2);
+    outputMatricesWithMinNorm(ms,3);
+    freeMemMatricesDouble(ms,3);
     return 0;
 }
 

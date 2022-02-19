@@ -236,3 +236,58 @@ matrix *createArrayOfMatrixFromArray(const int *values, int nMatrices, int nRows
 }
 
 
+matrixDouble getMemMatrixDouble(int row, int col) {
+    double **valueDouble = (double **) malloc(sizeof(double *) * row);
+    for (size_t i = 0; i < row; ++i) {
+        valueDouble[i] = (double *) malloc(sizeof(double) * col);
+    }
+    return (matrixDouble) {valueDouble, row, col};
+}
+
+matrixDouble *getMemArrayOfMatricesDouble(int nMatrices, int row, int col) {
+    matrixDouble *ms = (matrixDouble *) malloc(sizeof(matrixDouble) * nMatrices);
+    for (int i = 0; i < nMatrices; ++i) {
+        ms[i] = getMemMatrixDouble(row, col);
+    }
+    return ms;
+}
+
+
+void freeMemMatrixDouble(matrixDouble m) {
+    for (int i = 0; i < m.row; i++) {
+        free(m.valueDouble[i]);
+    }
+    free(m.valueDouble);
+}
+
+void freeMemMatricesDouble(matrixDouble *ms, int nMatrices) {
+    for (int i = 0; i < nMatrices; i++) {
+        freeMemMatrixDouble(ms[i]);
+    }
+    free(ms);
+}
+
+matrixDouble *createArrayOfMatrixFromArrayDouble(const double *values, int nMatrices, int row, int col) {
+    matrixDouble *ms = getMemArrayOfMatricesDouble(nMatrices, row, col);
+
+    int l = 0;
+    for (int k = 0; k < nMatrices; k++)
+        for (int i = 0; i < row; i++)
+            for (int j = 0; j < col; j++)
+                ms[k].valueDouble[i][j] = values[l++];
+
+    return ms;
+}
+
+
+void outputMatrixDouble(matrixDouble m) {
+    for (int i = 0; i < m.row; ++i) {
+        printf("|");
+        for (size_t j = 0; j < m.col; ++j) {
+            printf("%lf ", m.valueDouble[i][j]);
+        }
+        printf("\b| \n");
+    }
+}
+
+
