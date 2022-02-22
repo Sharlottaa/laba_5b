@@ -15,8 +15,9 @@ typedef struct position {
     int colIndex;
 } position;
 
+
 typedef struct matrixDouble {
-    double **valueDouble; // элементы матрицы
+    double **valueDouble; // элементы вещественной матрицы
     int row; // количество рядов
     int col; // количество столбцов
 } matrixDouble;

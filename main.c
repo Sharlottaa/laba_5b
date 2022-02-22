@@ -17,7 +17,7 @@ void swapRowsMinMax(matrix m) {
 
 //2. Упорядочить строки матрицы по неубыванию наибольших элементов строк
 //возвращает максимальный элемент в одномерном массиве а размера n
-int getMax( int *a, int n) {
+int getMax(int *a, int n) {
     int max = a[0];
     for (int i = 1; i < n; ++i) {
         if (a[i] > max) {
@@ -29,7 +29,7 @@ int getMax( int *a, int n) {
 
 //сортирует в двумерном массиве по неубыванию максимальные значения в одномерном массиве
 void sortRowsByMaxElement(matrix m) {
-    insertionSortRowsMatrixByRowCriteria(m,getMax);
+    insertionSortRowsMatrixByRowCriteria(m, getMax);
 }
 
 
@@ -37,7 +37,7 @@ void sortRowsByMaxElement(matrix m) {
 //минимальных элементов столбцов:
 
 //возвращает минимальный элемент в одномерном массиве а размера n
-int getMin( int *a, int n) {
+int getMin(int *a, int n) {
     int min = a[0];
     for (int i = 1; i < n; ++i) {
         if (a[i] < min) {
@@ -47,8 +47,8 @@ int getMin( int *a, int n) {
     return min;
 }
 
-void sortColsByMinElement(matrix m){
-    insertionSortColsMatrixByColCriteria(m,getMin);
+void sortColsByMinElement(matrix m) {
+    insertionSortColsMatrixByColCriteria(m, getMin);
 }
 
 // 4.сли данная квадратная матрица 𝐴 симметрична, то заменить 𝐴 ее квадрат
@@ -84,7 +84,7 @@ bool isUnique(int *a, int n) {
 }
 
 
-long long getSum( int *a, int n) {
+long long getSum(int *a, int n) {
     long long sum = 0;
     for (size_t i = 0; i < n; ++i)
         sum += a[i];
@@ -93,7 +93,10 @@ long long getSum( int *a, int n) {
 
 void transposeIfMatrixHasEqualSumOfRows(matrix m) {
     int *a = (int *) calloc(m.nRows, sizeof(int));
-    assert(a != NULL);
+    if (NULL == a) {
+        fprintf(stderr, "bad alloc");
+        exit(1);
+    }
 
     for (register size_t i = 0; i < m.nRows; ++i) {
         a[i] += getSum(m.values[i], m.nCols);
@@ -107,9 +110,9 @@ void transposeIfMatrixHasEqualSumOfRows(matrix m) {
 //6.Даны две квадратные матрицы 𝐴 и 𝐵. Определить, являются ли они взаимно
 //обратными (𝐴 = 𝐵−1).
 
-bool isMutuallyInverseMatrices(matrix m1, matrix m2){
-    matrix mul=mulMatrices(m1, m2);
-    if (isEMatrix(mul)){
+bool isMutuallyInverseMatrices(matrix m1, matrix m2) {
+    matrix mul = mulMatrices(m1, m2);
+    if (isEMatrix(mul)) {
         return 1;
     }
     return 0;
@@ -140,19 +143,23 @@ void append(int *a, int *n, int value) {
     (*n)++;
 }
 
-int getMaxValueOfPseudoDiagonal(matrix m, int row, int col){
+int getMaxValueOfPseudoDiagonal(matrix m, int row, int col) {
     int maxValue = m.values[row][col];
 
     while (col < m.nCols && row < m.nRows) {
-        maxValue=max(m.values[row][col], maxValue);
+        maxValue = max(m.values[row][col], maxValue);
         row++;
         col++;
     }
     return maxValue;
 }
 
-int findSumOfMaxesOfPseudoDiagonal(matrix m) {
+int findSumOfMaxesOfPseudoDiagonal_(matrix m) {
     int *sumMax = (int *) malloc(sizeof(int) * (m.nRows + m.nCols - 1));
+    if (NULL == sumMax) {
+        fprintf(stderr, "bad alloc");
+        exit(1);
+    }
     int size = 0;
 
     for (int i = 1; i < m.nCols; i++) {
@@ -166,42 +173,70 @@ int findSumOfMaxesOfPseudoDiagonal(matrix m) {
         append(sumMax, &size, maxValueDown);
     }
 
-    int sum = (int)getSum(sumMax, size);
+    int sum = (int) getSum(sumMax, size);
     free(sumMax);
 
     return sum;
 }
 
-//8. Дана прямоугольная матрица, все элементы которой различны. Найти минимальный элемент матрицы в выделенной области:
+int findSumOfMaxesOfPseudoDiagonal(matrix m) {
+    int *arrayForMax = (int *) malloc(sizeof(int) * (m.nRows + m.nCols - 1));
+    if (NULL == arrayForMax) {
+        fprintf(stderr, "bad alloc");
+        exit(1);
+    }
+    for (int i = 0; i < m.nRows + m.nCols - 1; ++i) {
+        arrayForMax[i] = INT_MIN;
+    }
+    for (int i = 0; i < m.nRows; ++i) {
+        for (int j = 0; j < m.nCols; ++j) {
+            int index = m.nRows - 1 - i + j;
+            if (m.values[i][j] > arrayForMax[index]) {
+                arrayForMax[index] = m.values[i][j];
+            }
+        }
+    }
+    arrayForMax[m.nRows - 1] = 0;
+    int sum = (int) getSum(arrayForMax, m.nRows + m.nCols - 1);
+    free(arrayForMax);
+    return sum;
+}
 
+//8. Дана прямоугольная матрица, все элементы которой различны. Найти минимальный элемент матрицы в выделенной области:
 
 int getMinInArea(matrix m) {
     position maxIndex = getMaxValuePos(m);
     int minValue = m.values[maxIndex.rowIndex][maxIndex.colIndex];
-    int left= maxIndex.colIndex;
-    int right= maxIndex.colIndex;
+    int left = maxIndex.colIndex;
+    int right = maxIndex.colIndex;
     for (int i = maxIndex.rowIndex; i >= 0; i--) {
-        for (int j = left; j <= right; ++j) {
-            if (m.values[i][j] < minValue)
-                minValue = m.values[i][j];
+        while (left <= right) {
+            if (m.values[i][left] < minValue)
+                minValue = m.values[i][left];
+            left++;
         }
-        left = left > 0 ? left - 1 : left;
         right = right < m.nCols ? right + 1 : right;
+        left = left > 0 ? left - 1 : left;
     }
     return minValue;
 }
 
 // 9
-double getDistance(int *a, int m){
-    int d=0;
+double getDistance(int *a, int m) {
+    int d = 0;
     for (int i = 0; i < m; ++i) {
-        d+=a[i]*a[i];
+        d += a[i] * a[i];
     }
     return sqrt(d);
 }
+
 void insertionSortRowsMatrixByRowCriteriaDouble(matrix m, double (*criteria)(int *, int)) {
 
     int *arrayRowsWithCriteria = (int *) (malloc(sizeof(int) * m.nRows));
+    if (NULL == arrayRowsWithCriteria) {
+        fprintf(stderr, "bad alloc");
+        exit(1);
+    }
     for (int i = 0; i < m.nRows; ++i) {
         arrayRowsWithCriteria[i] = criteria(m.values[i], m.nCols);
     }
@@ -218,8 +253,9 @@ void insertionSortRowsMatrixByRowCriteriaDouble(matrix m, double (*criteria)(int
     free(arrayRowsWithCriteria);
 
 }
-void sortByDistances(matrix m){
-    insertionSortRowsMatrixByRowCriteriaDouble(m,getDistance);
+
+void sortByDistances(matrix m) {
+    insertionSortRowsMatrixByRowCriteriaDouble(m, getDistance);
 }
 
 //10
@@ -242,17 +278,17 @@ int countNUnique(int *a, int n) {
     return count;
 }
 
-int countEqClassesByRowsSum(matrix m){
-    int *sum=(int*) malloc(sizeof(int)*m.nRows);
-    if(NULL==sum){
+int countEqClassesByRowsSum(matrix m) {
+    int *sum = (int *) malloc(sizeof(int) * m.nRows);
+    if (NULL == sum) {
         fprintf(stderr, "bad alloc");
         exit(1);
     }
     for (int i = 0; i < m.nRows; ++i) {
-        sum[i]= (int)getSum(m.values[i],m.nCols);
+        sum[i] = (int) getSum(m.values[i], m.nCols);
     }
-    qsort(sum,m.nRows,sizeof(int),cmp);
-    int countEq=countNUnique(sum,m.nRows);
+    qsort(sum, m.nRows, sizeof(int), cmp);
+    int countEq = countNUnique(sum, m.nRows);
     free(sum);
     return countEq;
 }
@@ -1351,8 +1387,7 @@ void test(){
     test_countNonDescendingRowsMatrices();
 }
 
-
-int main() {
+void x(){
     matrixDouble *ms = createArrayOfMatrixFromArrayDouble((double []) {
                                                                   -3.4, 4.5,
                                                                   3.4, -3.9,
@@ -1366,6 +1401,9 @@ int main() {
                                                           3, 2, 2);
     outputMatricesWithMinNorm(ms,3);
     freeMemMatricesDouble(ms,3);
+}
+int main() {
+    test_findSumOfMaxesOfPseudoDiagonal();
     return 0;
 }
 

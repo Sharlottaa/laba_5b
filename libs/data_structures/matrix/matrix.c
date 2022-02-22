@@ -7,14 +7,28 @@
 
 matrix getMemMatrix(int nRows, int nCols) {
     int **values = (int **) malloc(sizeof(int *) * nRows);
+    if (NULL == values) {
+        fprintf(stderr, "bad alloc");
+        exit(1);
+    }
     for (int i = 0; i < nRows; ++i) {
         values[i] = (int *) malloc(sizeof(int) * nCols);
+        if (NULL == values[i]) {
+            fprintf(stderr, "bad alloc");
+            exit(1);
+        }
     }
+
     return (matrix) {values, nRows, nCols};
 }
 
 matrix *getMemArrayOfMatrices(int nMatrices, int nRows, int nCols) {
     matrix *ms = (matrix *) malloc(sizeof(matrix) * nMatrices);
+    if (NULL == ms) {
+        fprintf(stderr, "bad alloc");
+        exit(1);
+    }
+
     for (int i = 0; i < nMatrices; ++i) {
         ms[i] = getMemMatrix(nRows, nCols);
     }
@@ -95,6 +109,10 @@ void swapColumns(matrix m, int j1, int j2) {
 void insertionSortRowsMatrixByRowCriteria(matrix m, int (*criteria)(int *, int)) {
 
     int *arrayRowsWithCriteria = (int *) (malloc(sizeof(int) * m.nRows));
+    if (NULL == arrayRowsWithCriteria) {
+        fprintf(stderr, "bad alloc");
+        exit(1);
+    }
     for (int i = 0; i < m.nRows; ++i) {
         arrayRowsWithCriteria[i] = criteria(m.values[i], m.nCols);
     }
@@ -114,7 +132,15 @@ void insertionSortRowsMatrixByRowCriteria(matrix m, int (*criteria)(int *, int))
 
 void insertionSortColsMatrixByColCriteria(matrix m, int (*criteria)(int *, int)) {
     int *arrayCols = (int *) (malloc(sizeof(int) * m.nCols));
+    if (NULL == arrayCols) {
+        fprintf(stderr, "bad alloc");
+        exit(1);
+    }
     int *arrayColsWithCriteria = (int *) (malloc(sizeof(int) * m.nCols));
+    if (NULL == arrayColsWithCriteria) {
+        fprintf(stderr, "bad alloc");
+        exit(1);
+    }
     for (int i = 0; i < m.nRows; ++i) {
         for (int j = 0; j < m.nCols; ++j) {
             arrayCols[j] = m.values[j][i];
@@ -138,7 +164,7 @@ void insertionSortColsMatrixByColCriteria(matrix m, int (*criteria)(int *, int))
 bool isSquareMatrix(matrix m) { return m.nRows == m.nCols; }
 
 bool twoMatricesEqual(matrix m1, matrix m2) {
-    if(m1.nRows == m2.nRows && m1.nCols == m2.nCols) {
+    if (m1.nRows == m2.nRows && m1.nCols == m2.nCols) {
 
         for (int i = 0; i < m1.nRows; ++i) {
             if (memcmp(m1.values[i], m2.values[i], sizeof(int) * m1.nCols) != 0) {
@@ -146,7 +172,7 @@ bool twoMatricesEqual(matrix m1, matrix m2) {
             }
         }
         return 1;
-    }else{
+    } else {
         return 0;
     }
 }
@@ -166,7 +192,7 @@ bool isEMatrix(matrix m) {
 bool isSymmetricMatrix(matrix m) {
     bool isSymmetric = true;
     for (int i = 0; i < m.nRows; ++i) {
-        for (int j = i+1; j < m.nCols; ++j) {
+        for (int j = i + 1; j < m.nCols; ++j) {
             if (m.values[i][j] != m.values[j][i]) {
                 isSymmetric = false;
             }
@@ -182,6 +208,7 @@ void transposeSquareMatrix(matrix m) {
         }
     }
 }
+
 position getMinValuePos(matrix m) {
     int minValue = m.values[0][0];
     position minIndex = {0, 0};
