@@ -179,6 +179,29 @@ int findSumOfMaxesOfPseudoDiagonal_(matrix m) {
     return sum;
 }
 
+int findSumOfMaxesOfPseudoDiagonal__(matrix m) {
+    int *arrayForMax = (int *) malloc(sizeof(int) * (m.nRows + m.nCols - 1));
+    if (NULL == arrayForMax) {
+        fprintf(stderr, "bad alloc");
+        exit(1);
+    }
+    for (int i = 0; i < m.nRows + m.nCols - 1; ++i) {
+        arrayForMax[i] = INT_MIN;
+    }
+    for (int i = 0; i < m.nRows; ++i) {
+        for (int j = 0; j < m.nCols; ++j) {
+            int index = m.nRows - 1 - i + j;
+            if (m.values[i][j] > arrayForMax[index]) {
+                arrayForMax[index] = m.values[i][j];
+            }
+        }
+    }
+    arrayForMax[m.nRows - 1] = 0;
+    int sum = (int) getSum(arrayForMax, m.nRows + m.nCols - 1);
+    free(arrayForMax);
+    return sum;
+}
+
 int findSumOfMaxesOfPseudoDiagonal(matrix m) {
     int *arrayForMax = (int *) malloc(sizeof(int) * (m.nRows + m.nCols - 1));
     if (NULL == arrayForMax) {
@@ -296,20 +319,24 @@ int countEqClassesByRowsSum(matrix m) {
 //11. Дана квадратная матрица. Определить 𝑘 – количество "особых" элементов матрицы, считая элемент "особым", если он больше суммы остальных элементов
 //своего столбца.
 
-int getNSpecialElement(matrix m){
-    int *aColm=(int*) malloc(sizeof(int)*m.nCols);
-    int *aColmSum=(int*) malloc(sizeof(int)*m.nRows);
-    if(NULL==aColm||NULL==aColmSum){
+int getNSpecialElement(matrix m) {
+    int *aColm = (int *) malloc(sizeof(int) * m.nCols);
+    if (NULL == aColm) {
         fprintf(stderr, "bad alloc");
         exit(1);
     }
-    int count=0;
+    int *aColmSum = (int *) malloc(sizeof(int) * m.nRows);
+    if (NULL == aColmSum) {
+        fprintf(stderr, "bad alloc");
+        exit(1);
+    }
+    int count = 0;
     for (int i = 0; i < m.nCols; ++i) {
         for (int j = 0; j < m.nRows; ++j)
             aColm[j] = m.values[j][i];
-        int maxInCol= getMax(aColm,m.nRows);
-         aColmSum[i]= (int)getSum(aColm,m.nRows);
-        if(aColmSum[i]-maxInCol<maxInCol){
+        int maxInCol = getMax(aColm, m.nRows);
+        aColmSum[i] = (int) getSum(aColm, m.nRows);
+        if (aColmSum[i] - maxInCol < maxInCol) {
             count++;
         }
     }
@@ -322,20 +349,20 @@ int getNSpecialElement(matrix m){
 //из столбцов, в котором находится минимальный элемент матрицы.
 
 
-void swapPenultimateRow(matrix m){
-    assert(m.nCols==m.nRows);
-    int *aColm=(int*) malloc(sizeof(int)*m.nRows);
-    if(NULL==aColm){
+void swapPenultimateRow(matrix m) {
+    assert(m.nCols == m.nRows);
+    int *aColm = (int *) malloc(sizeof(int) * m.nRows);
+    if (NULL == aColm) {
         fprintf(stderr, "bad alloc");
         exit(1);
     }
-    position min= getMinValuePos(m);
-    int col=min.colIndex;//местоположение столбца с минимом
+    position min = getMinValuePos(m);
+    int col = min.colIndex;//местоположение столбца с минимом
     for (int i = 0; i < m.nRows; ++i) {
-        aColm[i]=m.values[i][col];//столбец с минимом
+        aColm[i] = m.values[i][col];//столбец с минимом
     }
     for (int i = 0; i < m.nCols; ++i) {
-        m.values[m.nRows-2][i]=aColm[i];//строка предпоследняя с минимом столбца
+        m.values[m.nRows - 2][i] = aColm[i];//строка предпоследняя с минимом столбца
     }
     free(aColm);
 }
@@ -345,7 +372,7 @@ void swapPenultimateRow(matrix m){
 
 bool isNonDescendingSorted(int *a, int n) {
     for (int i = 1; i < n; ++i) {
-        if (a[i-1] > a[i])
+        if (a[i - 1] > a[i])
             return 0;
     }
     return 1;
@@ -360,10 +387,10 @@ bool hasAllNonDescendingRows(matrix m) {
     return 1;
 }
 
-int countNonDescendingRowsMatrices(matrix *ms, int nMatrix){
-    int count=0;
+int countNonDescendingRowsMatrices(matrix *ms, int nMatrix) {
+    int count = 0;
     for (int i = 0; i < nMatrix; ++i) {
-        if(hasAllNonDescendingRows(ms[i])){
+        if (hasAllNonDescendingRows(ms[i])) {
             count++;
         }
     }
@@ -373,35 +400,35 @@ int countNonDescendingRowsMatrices(matrix *ms, int nMatrix){
 //14 Дан массив целочисленных матриц. Вывести матрицы, имеющие наибольшее
 //число нулевых строк
 
-bool countValues(const int *a, int n, int value){
+bool countValues(const int *a, int n, int value) {
     for (int i = 0; i < n; ++i) {
-        if(a[i]!=value){
+        if (a[i] != value) {
             return 0;
         }
     }
     return 1;
 }
 
-int countZeroRows(matrix m){
-    int count=0;
+int countZeroRows(matrix m) {
+    int count = 0;
     for (int i = 0; i < m.nRows; ++i) {
-        count+= countValues(m.values[i],m.nCols,0);
+        count += countValues(m.values[i], m.nCols, 0);
     }
     return count;
 }
 
-void printMatrixWithMaxZeroRows(matrix *ms, int nMatrix){
-    int *aCountZeroRows=(int*) malloc(sizeof(int) * nMatrix);
-    if(NULL == aCountZeroRows){
+void printMatrixWithMaxZeroRows(matrix *ms, int nMatrix) {
+    int *aCountZeroRows = (int *) malloc(sizeof(int) * nMatrix);
+    if (NULL == aCountZeroRows) {
         fprintf(stderr, "bad alloc");
         exit(1);
     }
     for (int i = 0; i < nMatrix; ++i) {
-        aCountZeroRows[i]= countZeroRows(ms[i]);
+        aCountZeroRows[i] = countZeroRows(ms[i]);
     }
-    int maxCountZeroRows= getMax(aCountZeroRows,nMatrix);
+    int maxCountZeroRows = getMax(aCountZeroRows, nMatrix);
     for (int i = 0; i < nMatrix; ++i) {
-        if(aCountZeroRows[i]==maxCountZeroRows){
+        if (aCountZeroRows[i] == maxCountZeroRows) {
             outputMatrix(ms[i]);
         }
     }
@@ -433,7 +460,7 @@ double getMinDouble(double *a, int n) {
     return min;
 }
 
-void outputMatricesWithMinNorm(matrixDouble *ms,int nMatrices) {
+void outputMatricesWithMinNorm(matrixDouble *ms, int nMatrices) {
     double *aMatricesMaxfabs = (double *) malloc(sizeof(double) * nMatrices);
     for (int i = 0; i < nMatrices; ++i) {
         aMatricesMaxfabs[i] = getMaxMatrixDoublefabs(ms[i]);
@@ -1403,7 +1430,8 @@ void x(){
     freeMemMatricesDouble(ms,3);
 }
 int main() {
-    test_findSumOfMaxesOfPseudoDiagonal();
+    test();
+
     return 0;
 }
 
